@@ -21,7 +21,7 @@ ui <- fluidPage(theme = shinytheme("united"),
     tabPanel("Overview", 
       #add fluid rows for banner image and overview   
       fluidRow(
-        column(width = 12, img(src="gradhats.jpg"))
+        column(width = 12, img(src = "gradhats.jpg"))
       )
     ), 
     
@@ -30,26 +30,42 @@ ui <- fluidPage(theme = shinytheme("united"),
       # Sidebar for input widgets
       sidebarLayout(
         sidebarPanel(
-          sliderInput("admissions", label = "Admissions Rate", min = 0, max = 10, value = ""),  # Change Admission min/max values
-          sliderInput("sat", label = "SAT", min = 0, max = 10, value = "") # Change SAT min/max values
+          sliderInput("year", label = "Year", min = 2006, max = 2015, value = "2015", sep = ""), # Add range of years, default 2015
+          p(strong("Note")),
+          p("Choose a ", strong("Year"), " for a range"),
+          selectInput("state", label = "State", c("Washington")), # Updata choices with all states
+          
+          selectInput("school", label = "School", c("University of Washington")) # Updata choices with all states
         ), 
         mainPanel(
           tabsetPanel(
-            tabPanel("Admission", plotOutput("admission")), 
-            tabPanel("SAT", plotOutput("sat"))
+            tabPanel("Admission", plotOutput("admission"), # 1st plot
+                     tableOutput('amdission_table') # summary of admission table
+                     ), 
+            tabPanel("SAT", plotOutput("sat") # 2nd plot
+                     
+                     )
           )
         )
       )
     ), 
     
     # Cost tab on navigation bar
-    tabPanel("Cost", 
+    tabPanel("Tuition", 
       sidebarLayout(
         sidebarPanel(
-          sliderInput("cost", label = "Cost", min = 0, max = 10, value = "") # Change range values accordingly
+          sliderInput("tuition", label = "Tuition", min = 0, max = 10, value = "") # Change range values accordingly
         ), 
         mainPanel(
-          plotOutput("Tuitionvsfaculty")
+          tabsetPanel(
+            tabPanel(
+            plotOutput("Tuitionvsfaculty")
+            ),
+            
+            tabPanel(
+              DT::dataTableOutput("tuition_table")
+            )
+          )
         )
       )
     ), 
@@ -59,7 +75,7 @@ ui <- fluidPage(theme = shinytheme("united"),
       sidebarLayout(
         sidebarPanel(
           selectInput("state", label = "State", c("Washington")), # Updata choices with all states
-          sliderInput("year", label = "Year", min = 2006, max = 2015, value = "2015") # Add range of years, default 2015
+          sliderInput("year", label = "Year", min = 2006, max = 2015, value = "2015", sep = "") # Add range of years, default 2015
         ), 
         mainPanel(
           tabsetPanel(
@@ -80,7 +96,10 @@ ui <- fluidPage(theme = shinytheme("united"),
     # Conclusion of analysis and html tags as needed
     tabPanel("Conclusion", 
       fluidRow()
-    )
+    ),
+    
+    p("INFO 201 | Spring 2018 | April Murrieta, Emily Ding, Xiaotong Yang, Woong Jin Jang", align = "center"),
+    p("Link to ", strong(code("INFO201-Final-Project")), a(" GitHub ", href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
   )
 )
 
