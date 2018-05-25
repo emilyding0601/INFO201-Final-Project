@@ -11,11 +11,10 @@ library("readr")
 library("stringr")
 
 df_2006_2015 <- read.csv("data/MERGED2006-2015.csv", stringsAsFactors = FALSE)
-View(df_2006_2015)
 
 # set a var to change the column name
 col <- c("Year", "UnitID", "OPEID", "Institution.Name", "City",
-                  "State.Postcode", "Zipcode", "Admission.Rate", "Admission.Rate.For.All.Campuses",
+                  "State.Postcode", "Zipcode", "Admission.Rate", "Admission.Rate.For.All",
                   "Avg.SAT", "Enrollment", "In-State.Tuition", "Out-State.Tuition",
                   "Net.Tuition.Revenue", "Instructional.Expenditures", "Avg.Faculty.Salary",
                   "Percent.1st-generation", "Avg.Age", "Total.Enrolled.Men", "Total.Enrolled.Women",
@@ -29,6 +28,6 @@ num_schools <- function(year) {
 
 # admission table for the `admission`
 names(df_2006_2015)
-# admission <- df_2006_2015 %>% select(1, (4:6), (8:10)) %>% summarize()
-
+admission <- df_2006_2015 %>% select(1, (4:6), (8:10))
+summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") %>% summary()
 # 
