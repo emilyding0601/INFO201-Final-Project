@@ -9,6 +9,8 @@
 ########################
 library(shiny)
 library(shinythemes)
+library(leaflet)
+
 source("process.R")
 
 ui <- fluidPage(theme = shinytheme("united"), 
@@ -21,10 +23,7 @@ ui <- fluidPage(theme = shinytheme("united"),
     tabPanel("Overview", 
       #add fluid rows for banner image and overview   
       fluidRow(
-        column(width = 12, img(src = "gradhats.jpg")),
-        column(
-          
-        )
+        column(width = 12, img(src = "gradhats.jpg"))
       )
     ), 
     
@@ -34,10 +33,12 @@ ui <- fluidPage(theme = shinytheme("united"),
       sidebarLayout(
         sidebarPanel(
           sliderInput("year", label = "Year", min = 2006, max = 2015, value = "2015", sep = ""), # Add range of years, default 2015
-          p(strong("Note")),
-          p("Choose a ", strong("Year"), " for a range"),
-          selectInput("state", label = "State", c("Washington")), # Updata choices with all states
+          helpText(strong("Note")),
+          helpText("Choose a ", strong("Year"), " for a range"),
+          br(),
+          selectInput('state', "State Option", c(state.name), selectize = FALSE), # Updata choices with all states
           
+          br(),
           selectInput("school", label = "School", c("University of Washington")) # Updata choices with all states
         ), 
         mainPanel(
@@ -57,15 +58,17 @@ ui <- fluidPage(theme = shinytheme("united"),
     tabPanel("Tuition", 
       sidebarLayout(
         sidebarPanel(
-          sliderInput("tuition", label = "Tuition", min = 0, max = 10, value = "") # Change range values accordingly
+          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = "") # Change range values accordingly
         ), 
         mainPanel(
           tabsetPanel(
             tabPanel(
+              "Visualization",
             plotOutput("Tuitionvsfaculty")
             ),
             
             tabPanel(
+              "Table Set",
               DT::dataTableOutput("tuition_table")
             )
           )
@@ -78,7 +81,7 @@ ui <- fluidPage(theme = shinytheme("united"),
       sidebarLayout(
         sidebarPanel(
           selectInput("state", label = "State", c("Washington")), # Updata choices with all states
-          sliderInput("year", label = "Year", min = 2006, max = 2015, value = "2015", sep = "") # Add range of years, default 2015
+          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = "") # Add range of years, default 2015
         ), 
         mainPanel(
           tabsetPanel(
@@ -90,17 +93,28 @@ ui <- fluidPage(theme = shinytheme("united"),
     ), 
     
     # Map of 2015 Universities
-    tabPanel("Map", 
-      textInput("city", label = "City"), 
-      textInput("state", label = "State"), 
-      textInput("university", label = "University")
+    tabPanel(
+      "Map", 
+      sidebarLayout(
+        sidebarPanel(
+          textInput("city", label = "City"), 
+          textInput("state", label = "State"), 
+          textInput("university", label = "University")
+        ),
+        
+        mainPanel(
+          leaflet('map')
+        )
+      )
     ),
     
     # Conclusion of analysis and html tags as needed
     tabPanel("Conclusion", 
       fluidRow()
     ),
-    
+    br(),
+    hr(),
+    br(),
     p("INFO 201 | Spring 2018 | April Murrieta, Emily Ding, Xiaotong Yang, Woong Jin Jang", align = "center"),
     p("Link to ", strong(code("INFO201-Final-Project")), a(" GitHub ", href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
   )

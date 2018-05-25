@@ -11,7 +11,6 @@ library("readr")
 library("stringr")
 
 df_2006_2015 <- read.csv("data/MERGED2006-2015.csv", stringsAsFactors = FALSE)
-View(df_2006_2015)
 
 # set a var to change the column name
 col <- c("Year", "UnitID", "OPEID", "Institution.Name", "City",
@@ -27,8 +26,7 @@ num_schools <- function(year) {
   df_2006_2015 %>% filter(Year == year) %>% nrow()
 }
 
-View(df_2006_2015)
-
+# set a summary table of all school number
 num_school_table <- data.frame(Year = c(2006:2015), 
                                Total.Number = c(num_schools(2006),
                                                 num_schools(2007),
