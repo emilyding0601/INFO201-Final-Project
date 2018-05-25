@@ -27,6 +27,20 @@ num_schools <- function(year) {
   df_2006_2015 %>% filter(Year == year) %>% nrow()
 }
 
+View(df_2006_2015)
+
+num_school_table <- data.frame(Year = c(2006:2015), 
+                               Total.Number = c(num_schools(2006),
+                                                num_schools(2007),
+                                                num_schools(2008),
+                                                num_schools(2009),
+                                                num_schools(2010),
+                                                num_schools(2011),
+                                                num_schools(2012),
+                                                num_schools(2013),
+                                                num_schools(2014),
+                                                num_schools(2015)))
+
 # admission table for the `admission`
 names(df_2006_2015)
 # admission <- df_2006_2015 %>% select(1, (4:6), (8:10)) %>% summarize()
