@@ -11,6 +11,7 @@ library("readr")
 library("stringr")
 
 df_2006_2015 <- read.csv("data/MERGED2006-2015.csv", stringsAsFactors = FALSE)
+View(df_2006_2015)
 
 # set a var to change the column name
 col <- c("Year", "UnitID", "OPEID", "Institution.Name", "City",
@@ -38,7 +39,7 @@ num_school_table <- data.frame(Year = c(2006:2015),
                                                 num_schools(2012),
                                                 num_schools(2013),
                                                 num_schools(2014),
-                                                num_schools(2015)))
+                                                num_schools(2015)), stringsAsFactors = FALSE)
 
 # admission table for the `admission`
 names(df_2006_2015)

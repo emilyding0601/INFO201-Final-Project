@@ -21,7 +21,10 @@ ui <- fluidPage(theme = shinytheme("united"),
     tabPanel("Overview", 
       #add fluid rows for banner image and overview   
       fluidRow(
-        column(width = 12, img(src = "gradhats.jpg"))
+        column(width = 12, img(src = "gradhats.jpg")),
+        column(
+          
+        )
       )
     ), 
     
