@@ -9,6 +9,7 @@
 ########################
 library(shiny)
 library(shinythemes)
+source("process.R")
 
 ui <- fluidPage(theme = shinytheme("united"), 
   includeCSS("finalProject.css"),
