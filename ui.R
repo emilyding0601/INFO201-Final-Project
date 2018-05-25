@@ -116,7 +116,7 @@ ui <- fluidPage(theme = shinytheme("united"),
     hr(),
     br(),
     p("INFO 201 | Spring 2018 | April Murrieta, Emily Ding, Xiaotong Yang, Woong Jin Jang", align = "center"),
-    p("Link to ", strong(code("INFO201-Final-Project")), a(" GitHub ", href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
+    p("Link to ", a(strong(code("INFO201-Final-Project")), href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
   )
 )
 
