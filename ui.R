@@ -17,13 +17,13 @@ library(shinycssloaders)
 source("process.R")
 
 #-------------------------------------------------------------------------
-ui <- fluidPage(
+ui <- fluidPage (
   theme = shinytheme("united"),
   includeCSS("finalProject.css"),
 
   #-------------------------------------------------------------------------
   # Top navigation bar for Home, Admission, Cost, Diversity, Conclusion
-  navbarPage(
+  navbarPage (
     "College Score Card Data",
 
     # Overview tab in navigation bar
@@ -91,22 +91,35 @@ ui <- fluidPage(
 
     #-------------------------------------------------------------------------
     # Cost tab on navigation bar
-    tabPanel(
-      "Tuition",
+
+    tabPanel("Cost", 
       sidebarLayout(
         sidebarPanel(
-          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = "") # Change range values accordingly
-        ),
+
+          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""), # Change range values accordingly
+
+          sliderInput("cost", label = "Dollars ($)", min = 0, max = 10, value = "") # Change range values accordingly
+
+        ), 
         mainPanel(
           tabsetPanel(
             tabPanel(
+              
               "Visualization",
               plotOutput("Tuitionvsfaculty")
             ),
 
             tabPanel(
-              "Table Set",
-              DT::dataTableOutput("tuition_table")
+              
+              "Tuition",
+            plotOutput('Tuitionvsfaculty'), # 3rd plot: in-state & out-state vs faculty salary
+            DT::dataTableOutput("tuition_table") # table of in-state & out-state
+            ),
+            
+            tabPanel(
+              "Expenditure",
+              plotOutput('expenditurevsfaculty')  # 4th plot: expenditure vs faculty salary
+
             )
           )
         )
@@ -124,12 +137,13 @@ ui <- fluidPage(
         ),
         mainPanel(
           tabsetPanel(
-            tabPanel(
-              "Percent Men/Women", plotOutput("menwomen") # 5th plot
-            ),
-            tabPanel(
-              "Diversity", dataTableOutput("diversity") # 6th plot
-            )
+
+            tabPanel("Percent Men/Women", plotOutput("menwomen") # 5th plot
+                     
+                     ),
+            tabPanel("Diversity", dataTableOutput("diversity") # 6th plot
+                     
+                     )
           )
         )
       )
@@ -159,7 +173,7 @@ ui <- fluidPage(
     ),
     br(),
     hr(),
-    
+
     p("INFO 201 | Spring 2018 | April Murrieta, Emily Ding, Xiaotong Yang, Woong Jin Jang", align = "center"),
     p("Link to ", a(strong(code("INFO201-Final-Project")), href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
   )

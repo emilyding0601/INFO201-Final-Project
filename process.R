@@ -54,4 +54,6 @@ avg_age_year <- df_2006_2015 %>% group_by(Year, State.Postcode) %>%
 
 ## For map
 # extract the data from the raw data set
+
 df_2015 <- read.csv("data/MERGED2015.csv", stringsAsFactors = FALSE)
+
