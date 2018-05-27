@@ -80,6 +80,7 @@ ui <- fluidPage(
             tabPanel(
               "SAT Score Plot",
               uiOutput("SAT_ui"),
+              em(tags$p("All scores are converted to the latest SAT with the total score of", strong(code("1600")), ".")),
               em(tags$p("Not all schools have 2006-2015 SAT score data available."))
             )
           )
