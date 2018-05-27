@@ -9,6 +9,7 @@
 ########################
 library(shiny)
 library(shinythemes)
+library(leaflet)
 source("process.R")
 
 ui <- fluidPage(theme = shinytheme("united"), 
@@ -21,7 +22,12 @@ ui <- fluidPage(theme = shinytheme("united"),
     tabPanel("Overview", 
       #add fluid rows for banner image and overview   
       fluidRow(
-        column(width = 12, img(src = "gradhats.jpg"))
+        h2("Left blank for HTML"),
+        
+        br(),
+        hr(),
+        column(width = 6, img(src = "students.png")),
+        column(width = 6, img(src = "students.png"))
       )
     ), 
     
@@ -31,8 +37,8 @@ ui <- fluidPage(theme = shinytheme("united"),
       sidebarLayout(
         sidebarPanel(
           sliderInput("year", label = "Year", min = 2006, max = 2015, value = "2015", sep = ""), # Add range of years, default 2015
-          p(strong("Note")),
-          p("Choose a ", strong("Year"), " for a range"),
+          helpText(strong("Note")),
+          helpText("Choose a ", strong("Year"), " for a range"),
           selectInput("state", label = "State", c("Washington")), # Updata choices with all states
           
           selectInput("school", label = "School", c("University of Washington")) # Updata choices with all states
@@ -51,19 +57,22 @@ ui <- fluidPage(theme = shinytheme("united"),
     ), 
     
     # Cost tab on navigation bar
-    tabPanel("Tuition", 
+    tabPanel("Cost", 
       sidebarLayout(
         sidebarPanel(
-          sliderInput("tuition", label = "Tuition", min = 0, max = 10, value = "") # Change range values accordingly
+          sliderInput("cost", label = "Dollars ($)", min = 0, max = 10, value = "") # Change range values accordingly
         ), 
         mainPanel(
           tabsetPanel(
             tabPanel(
-            plotOutput("Tuitionvsfaculty")
+              "Tuition",
+            plotOutput('Tuitionvsfaculty'), # 3rd plot: in-state & out-state vs faculty salary
+            DT::dataTableOutput("tuition_table") # table of in-state & out-state
             ),
             
             tabPanel(
-              DT::dataTableOutput("tuition_table")
+              "Expenditure",
+              plotOutput('expenditurevsfaculty')  # 4th plot: expenditure vs faculty salary
             )
           )
         )
@@ -79,8 +88,12 @@ ui <- fluidPage(theme = shinytheme("united"),
         ), 
         mainPanel(
           tabsetPanel(
-            tabPanel("Percent Men/Women", plotOutput("menwomen")),
-            tabPanel("Diversity", dataTableOutput("diversity"))
+            tabPanel("Percent Men/Women", plotOutput("menwomen") # 5th plot
+                     
+                     ),
+            tabPanel("Diversity", dataTableOutput("diversity") # 6th plot
+                     
+                     )
           )
         )
       )
@@ -97,9 +110,10 @@ ui <- fluidPage(theme = shinytheme("united"),
     tabPanel("Conclusion", 
       fluidRow()
     ),
+    hr(),
     
     p("INFO 201 | Spring 2018 | April Murrieta, Emily Ding, Xiaotong Yang, Woong Jin Jang", align = "center"),
-    p("Link to ", strong(code("INFO201-Final-Project")), a(" GitHub ", href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
+    p("Link to ", a(strong(code("INFO201-Final-Project")), href = "https://github.com/aprilynn/INFO201-Final-Project"), align = "center")
   )
 )
 
