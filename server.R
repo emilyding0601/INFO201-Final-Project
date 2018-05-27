@@ -12,6 +12,7 @@ server <- function(input, output) {
   # generate the map
   output$map <- renderLeaflet({
     # coming soon
+    
     return(leaflet() %>% 
              addTiles() 
              )
