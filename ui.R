@@ -17,13 +17,13 @@ library(shinycssloaders)
 source("process.R")
 
 #-------------------------------------------------------------------------
-ui <- fluidPage (
+ui <- fluidPage(
   theme = shinytheme("united"),
   includeCSS("finalProject.css"),
 
   #-------------------------------------------------------------------------
   # Top navigation bar for Home, Admission, Cost, Diversity, Conclusion
-  navbarPage (
+  navbarPage(
     "College Score Card Data",
 
     # Overview tab in navigation bar
@@ -92,34 +92,32 @@ ui <- fluidPage (
     #-------------------------------------------------------------------------
     # Cost tab on navigation bar
 
-    tabPanel("Cost", 
+    tabPanel(
+      "Cost",
       sidebarLayout(
         sidebarPanel(
-
           sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""), # Change range values accordingly
 
           sliderInput("cost", label = "Dollars ($)", min = 0, max = 10, value = "") # Change range values accordingly
-
-        ), 
+        ),
         mainPanel(
           tabsetPanel(
             tabPanel(
-              
               "Visualization",
               plotOutput("Tuitionvsfaculty")
             ),
+            #
+            #     tabPanel(
+            #
+            #         "Tuition",
+            #        plotOutput('Tuitionvsfaculty') # 3rd plot: in-state & out-state vs faculty salary
+            #         DT::dataTableOutput("tuition_table") # table of in-state & out-state
+            #      ),
 
-            tabPanel(
-              
-              "Tuition",
-            plotOutput('Tuitionvsfaculty'), # 3rd plot: in-state & out-state vs faculty salary
-            DT::dataTableOutput("tuition_table") # table of in-state & out-state
-            ),
-            
             tabPanel(
               "Expenditure",
-              plotOutput('expenditurevsfaculty')  # 4th plot: expenditure vs faculty salary
-
+              plotOutput("expenditurevsfaculty") # 4th plot: expenditure vs faculty salary
+              #
             )
           )
         )
@@ -137,13 +135,12 @@ ui <- fluidPage (
         ),
         mainPanel(
           tabsetPanel(
-
-            tabPanel("Percent Men/Women", plotOutput("menwomen") # 5th plot
-                     
-                     ),
-            tabPanel("Diversity", dataTableOutput("diversity") # 6th plot
-                     
-                     )
+            tabPanel(
+              "Percent Men/Women", plotOutput("menwomen") # 5th plot
+            ),
+            tabPanel(
+              "Diversity", dataTableOutput("diversity") # 6th plot
+            )
           )
         )
       )
@@ -152,24 +149,25 @@ ui <- fluidPage (
     #-------------------------------------------------------------------------
     # Map of 2015 Universities
     tabPanel(
-      "Map", 
+      "Map",
       sidebarLayout(
         sidebarPanel(
-          textInput("city", label = "City"), 
-          textInput("state", label = "State"), 
+          textInput("city", label = "City"),
+          textInput("state", label = "State"),
           textInput("university", label = "University")
         ),
-        
+
         mainPanel(
-          leaflet('map')
+          leaflet("map")
         )
       )
     ),
-    
+
     #-------------------------------------------------------------------------
     # Conclusion of analysis and html tags as needed
-    tabPanel("Conclusion", 
-             fluidRow()
+    tabPanel(
+      "Conclusion",
+      fluidRow()
     ),
     br(),
     hr(),
