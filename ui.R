@@ -82,6 +82,20 @@ ui <- fluidPage(
               uiOutput("SAT_ui"),
               em(tags$p("All scores are converted to the latest SAT with the total score of", strong(code("1600")), ".")),
               em(tags$p("Not all schools have 2006-2015 SAT score data available."))
+            ),
+            #-------------------------------------------------------------------------
+            tabPanel(
+              "Summary",
+              br(),
+              h4(strong("Summary:")), 
+              br(),
+              p("After observing recent year's admission rate and admitted students' average SAT score of many colleges,
+                we noticed that most of the schools, especially schools with academic prestige, have an downward trend
+                of admission rate and an upward trend of admitted students' average SAT score. That is, most colleges
+                are harder and harder to get into."),
+              br(),
+              p("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
+                a certain range, about ten percent for the admission rate and fifty points for the SAT score.")
             )
           )
         )
