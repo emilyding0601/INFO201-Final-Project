@@ -68,8 +68,7 @@ ui <- fluidPage(
             #-------------------------------------------------------------------------
             tabPanel(
               "Admission Rate Plot",
-              h4(strong(textOutput("warning"))),
-              plotlyOutput("admission_rate_plot"),
+              uiOutput("admission_rate_ui"),
               em(tags$p("Not all schools have 2006-2015 admission rate data available."))
             ),
             #-------------------------------------------------------------------------
@@ -80,8 +79,7 @@ ui <- fluidPage(
             #-------------------------------------------------------------------------
             tabPanel(
               "SAT Score Plot",
-              h4(strong(textOutput("warning2"))),
-              plotlyOutput("SAT_plot"),
+              uiOutput("SAT_ui"),
               em(tags$p("Not all schools have 2006-2015 SAT score data available."))
             )
           )

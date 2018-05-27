@@ -9,6 +9,8 @@ source("process.R")
 # `input` and `output` arguments
 server <- function(input, output) {
 
+  #---------------------------------------------------------------------------------
+# This is for admission rate Panel
  output$college_names <- renderUI({
    statewise_college <- unique(filter(admission, 
                                       State.Postcode == state.abb[match(input$state, state.name)])$Institution.Name)
@@ -42,25 +44,28 @@ server <- function(input, output) {
       }
   })
   
-  output$warning <- renderText({
+  output$admission_rate_ui <- renderUI({
     if(input$school == 'All'){
-      return("Please choose a school first.")
+      return(h4(strong("Please choose a school first.")))
+    } else {
+    plotlyOutput("admission_rate_plot")
     }
   })
 
   # Admission Rate Plot
-  output$admission_rate_plot <- renderPlotly({
-    plot1 <- ggplot(data = filtered(), mapping = aes(x = Year, y = Admission.Rate)) +
-      geom_point(aes()) +
-      geom_line(aes()) +
-      labs(
-        title = "Admission Rate vs. Year",
-        x = "Year",
-        y = "Admission Rate"
-      )
-    plot1 <- ggplotly(plot1)
-  })
+   output$admission_rate_plot <- renderPlotly({
+     plot1 <- ggplot(data = filtered(), mapping = aes(x = Year, y = Admission.Rate)) +
+       geom_point(aes()) +
+       geom_line(aes()) +
+       labs(
+         title = "Admission Rate vs. Year",
+         x = "Year",
+         y = "Admission Rate"
+       )
+     plot1 <- ggplotly(plot1)
+   })
 #---------------------------------------------------------------------------------
+# This is for SAT Panel
   filtered_2 <- reactive({
     SAT_table_select <- admission %>%
       select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
@@ -87,9 +92,11 @@ server <- function(input, output) {
     }
   })
   
-  output$warning2 <- renderText({
+  output$SAT_ui <- renderUI({
     if(input$school == 'All'){
-      return("Please choose a school first.")
+      return(h4(strong("Please choose a school first.")))
+    } else {
+      plotlyOutput("SAT_plot")
     }
   })
   
