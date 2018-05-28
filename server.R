@@ -267,10 +267,7 @@ server <- function(input, output) {
       
     # has a bug: cannot empty the ``selectInput
       DT::datatable(map_table(), escape = FALSE)
-    
-    
   })
-    
 }
 
 shinyServer(server)
