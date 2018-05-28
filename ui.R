@@ -43,15 +43,23 @@ ui <- fluidPage(
       # Sidebar for input widgets
       sidebarLayout(
         sidebarPanel(
-          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
-          helpText(strong("Note")),
+          h5(strong("Note")),
           helpText("Choose a ", strong("Year"), " for a range"),
-
+          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+          
           br(),
-          selectInput("state", "State Option", c(Choose = "All", state.name), selectize = FALSE),
-
-          br(),
-          uiOutput("college_names")
+          h5(strong("Note")),
+          p("You have", strong(code("two")), "choices of college selection,"),
+          p("But you can only use", strong(code("one")), "of the selection methods:"),
+          helpText("1) You can", strong(code("select or type")), "a state first and then", 
+                   strong(code("select or type")), "a college in that state."),
+          selectInput('state', label = "State Option (Select or Type)", 
+                      choices =  c("", state.name), 
+                      multiple = F, selected = F),
+          uiOutput("college_names"),
+          
+          helpText("2) You can", strong(code("type")), "the college name directly."),
+          uiOutput("college_names_2")
         ),
         #-------------------------------------------------------------------------
         mainPanel(
@@ -83,7 +91,7 @@ ui <- fluidPage(
             tabPanel(
               "Summary",
               br(),
-              h4(strong("Summary:")), 
+              h4(strong("Summary:")),
               br(),
               p("After observing recent year's admission rate and admitted students' average SAT score of many colleges,
                 we noticed that most of the schools, especially schools with academic prestige, have an downward trend
@@ -105,7 +113,7 @@ ui <- fluidPage(
       "Cost",
       sidebarLayout(
         sidebarPanel(
-          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""), # Change range values accordingly
+          sliderInput("year_2", "Year", 2006, 2015, value = c(2006, 2015), sep = ""), # Change range values accordingly
 
           sliderInput("cost", label = "Dollars ($)", min = 0, max = 10, value = "") # Change range values accordingly
         ),
@@ -123,6 +131,22 @@ ui <- fluidPage(
             )
           )
         )
+      )
+    ),
+
+    #-------------------------------------------------------------------------
+    tabPanel(
+      "Prediction",
+      sidebarLayout(
+        sidebarPanel(
+          h4(strong("Clarification:")),
+          p(
+            "This prediction is solely based on your", strong(code("SAT score")), ", and your desired ",
+            strong(code("cost")), "and", strong(code("location")), "so it can be highly inaccurate. 
+        But we just want to give you an idea that what schools may suit you."
+          )
+        ),
+        mainPanel()
       )
     ),
 
@@ -147,6 +171,7 @@ ui <- fluidPage(
         )
       )
     ),
+
 
     #-------------------------------------------------------------------------
     # Map of 2015 Universities

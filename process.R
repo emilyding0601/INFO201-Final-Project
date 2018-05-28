@@ -105,6 +105,7 @@ text <- paste("<h4/>", df_2015$Institution.Name, "<br/>", "<br/>",
               "Out-state Tuition: ", " $", df_2015$`Out-State.Tuition`, "<br/>",
               "Admission Rate: ", round(df_2015$Admission.Rate, 2) * 100, "%", "<br/>",
               "Average Age: ", round(df_2015$Avg.Age, 0), "<br/>",
+<<<<<<< HEAD
               sep = "") %>% lapply(htmltools::HTML)
 
 # map data table
@@ -117,3 +118,6 @@ avg_age <- df_2015 %>% group_by(Year) %>%
   summarize(avg.age = mean(Avg.Age,  na.rm = TRUE))
 
 max_tuition <- df_2015
+=======
+              sep = "") %>% lapply(htmltools::HTML)
+>>>>>>> 517aabbd4ce19669aba751250f0d278fbbdc10c3
