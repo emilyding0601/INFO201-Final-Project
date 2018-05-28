@@ -1,8 +1,4 @@
-library(shiny)
-library(leaflet)
-library(plotly)
-library(dplyr)
-
+# Extract data set from `process.R`
 source("process.R")
 
 # The server is a function that takes
@@ -116,78 +112,101 @@ server <- function(input, output) {
   # generate the maps
   
   # observe({
-  #   
+  # 
   #   filtered_city <- getCity(input$city_map)
-  #   
-  #   text <- paste("Name: ", "<strong/>", filtered_city$Institution.Name, "<strong/>", "<br/>",
-  #                 "Enrollment Number: ", "<strong/>", filtered_city$Enrollment, "<strong/>", "<br/>", 
-  #                 "In-state Tuition: ","<strong/>", filtered_city$`In-State.Tuition`, "<strong/>", "<br/>",
-  #                 "Out-state Tuition: ","<strong/>", filtered_city$`Out-State.Tuition`, "<strong/>", "<br/>",
-  #                 "Admission Rate: ","<strong/>", filtered_city$Admission.Rate, "<strong/>", "<br/>",
-  #                 "Average Age: ","<strong/>", round(filtered_city$Avg.Age, 0), "<strong/>", "<br/>",
+  # 
+  #   text <- paste("<h4/>", filtered_city$Institution.Name, "<br/>", "<br/>",
+  #                 "Enrollment Number: ", filtered_city$Enrollment, "<br/>", 
+  #                 "In-state Tuition: ", filtered_city$`In-State.Tuition`, "<br/>",
+  #                 "Out-state Tuition: ", filtered_city$`Out-State.Tuition`, "<br/>",
+  #                 "Admission Rate: ", filtered_city$Admission.Rate, "<br/>",
+  #                 "Average Age: ", round(filtered_city$Avg.Age, 0), "<br/>",
   #                 sep = "") %>% lapply(htmltools::HTML)
-  #   
-  #   leafletProxy('map') %>% clearMarkers() %>% 
+  # 
+  #   leafletProxy('map') %>% clearMarkers() %>%
   #     addCircleMarkers(lng = filtered_city$Long,
   #                      lat = filtered_city$Lat,
   #                      label = text)
-  #   
-  #   
-  # })
   # 
+  # 
+  # })
+
   # observe({
-  #   
+  # 
   #   filtered_state_city <- getState(input$state_map) %>% filter(City == input$city_map)
-  #   
-  #   text <- paste("Name: ", "<strong/>", filtered_state_city$Institution.Name, "<strong/>", "<br/>",
-  #                 "Enrollment Number: ", "<strong/>", filtered_state_city$Enrollment, "<strong/>", "<br/>", 
-  #                 "In-state Tuition: ","<strong/>", filtered_state_city$`In-State.Tuition`, "<strong/>", "<br/>",
-  #                 "Out-state Tuition: ","<strong/>", filtered_state_city$`Out-State.Tuition`, "<strong/>", "<br/>",
-  #                 "Admission Rate: ","<strong/>", filtered_state_city$Admission.Rate, "<strong/>", "<br/>",
-  #                 "Average Age: ","<strong/>", round(filtered_state_city$Avg.Age, 0), "<strong/>", "<br/>",
+  # 
+  #   text <- paste("<h4/>", filtered_state_city$Institution.Name, "<br/>", "<br/>",
+  #                 "Enrollment Number: ", filtered_state_city$Enrollment, "<br/>", 
+  #                 "In-state Tuition: ", filtered_state_city$`In-State.Tuition`, "<br/>",
+  #                 "Out-state Tuition: ", filtered_state_city$`Out-State.Tuition`, "<br/>",
+  #                 "Admission Rate: ", filtered_state_city$Admission.Rate, "<br/>",
+  #                 "Average Age: ", round(filtered_state_city$Avg.Age, 0), "<br/>",
   #                 sep = "") %>% lapply(htmltools::HTML)
-  #   
-  #   leafletProxy('map', data = filtered_state_city) %>% clearMarkers() %>% 
+  # 
+  #   leafletProxy('map', data = filtered_state_city) %>% clearMarkers() %>%
   #     addCircleMarkers(lng = filtered_state_city$Long,
   #                      lat = filtered_state_city$Lat,
   #                      label = text)
-  #   
+  # 
   # })
   
   observe({
     
     filtered_state <- getState(input$state_map)
     
-    text <- paste("<h4/>", filtered_state$Institution.Name, "<br/>",
+    text <- paste(filtered_state$Institution.Name, "<br/>", "<br/>",
                   "Enrollment Number: ", filtered_state$Enrollment, "<br/>", 
-                  "In-state Tuition: ", filtered_state$`In-State.Tuition`, "<br/>",
-                  "Out-state Tuition: ", filtered_state$`Out-State.Tuition`, "<br/>",
-                  "Admission Rate: ", filtered_state$Admission.Rate, "<br/>",
+                  "In-state Tuition: ", " $", filtered_state$`In-State.Tuition`, "<br/>",
+                  "Out-state Tuition: ", " $", filtered_state$`Out-State.Tuition`, "<br/>",
+                  "Admission Rate: ", round(filtered_state$Admission.Rate, 2) * 100, "%", "<br/>",
                   "Average Age: ", round(filtered_state$Avg.Age, 0), "<br/>",
                   sep = "") %>% lapply(htmltools::HTML)
     
     leafletProxy('map') %>% clearMarkers() %>% 
-      addCircleMarkers(lng = filtered_state$Long,
+      setView(lng = filtered_state$Long[1], lat = filtered_state$Lat[1], zoom = 7) %>% 
+      addMarkers(lng = filtered_state$Long,
                        lat = filtered_state$Lat,
                        label = text,
-                       labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
-                                                   textsize = "17px", direction = "auto"))
+                 labelOptions = labelOptions(style = list("font-weight" = "normal",
+                                                          padding = "5px 10px"), 
+                                             textsize = "16px", direction = "auto"))
     
   })
   
-  
+  # initialize map
   output$map <- renderLeaflet({
     # select state and city data set 
     leaflet() %>% 
       addTiles() %>% 
       setView(lng = -122.3321, lat = 47.6062, zoom = 7) %>% 
-      addCircleMarkers(lng = df_2015$Long,
+      addMarkers(lng = df_2015$Long,
                        lat = df_2015$Lat,
                        label = text,
-                       labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
-                                                  textsize = "17px", direction = "auto"))
+                 labelOptions = labelOptions(style = list("font-weight" = "normal",
+                                                          padding = "5px 10px"), 
+                                             textsize = "16px", direction = "auto"))
 
   })
+  
+  map_table <- reactive({
+
+      filtered <- getState(input$state_map) %>%
+        select(UnitID, Institution.Name, Institution.URL, Avg.SAT)
+
+      filtered$Institution.URL <- paste0("<a href='",filtered$Institution.URL,"'>", 
+                                         filtered$Institution.URL,"</a>")
+
+    return(filtered)
+  })
+
+  output$maptable <- DT::renderDataTable({
+      
+    # has a bug: cannot empty the ``selectInput
+      DT::datatable(map_table(), escape = FALSE)
+    
+    
+  })
+    
 }
 
 shinyServer(server)

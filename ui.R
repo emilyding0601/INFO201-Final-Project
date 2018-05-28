@@ -1,10 +1,4 @@
 ########################
-### Install Packages ###
-########################
-
-# install.packages("shinythemes")
-
-########################
 ### Library Packages ###
 ########################
 library(shiny)
@@ -13,7 +7,9 @@ library(leaflet)
 library(plotly)
 library(dplyr)
 library(shinycssloaders)
-
+library(DT)
+library(RColorBrewer)
+library(ggmap)
 source("process.R")
 
 #-------------------------------------------------------------------------
@@ -158,25 +154,38 @@ ui <- fluidPage(
       "Map",
       sidebarLayout(
         sidebarPanel(
-          selectInput('state_map', label = "Select Your State(s)", 
+          selectizeInput('state_map', label = "Select Your State(s)", 
                       choices =  c(state.name), 
-                      multiple = TRUE, selected = "Choose"),
-# 
-#           selectInput('city_map', label = "Select Your Cities",
-#                       choices = c(unique(df_2015$City)),
-#                       multiple = TRUE, selected = "Choose"),
+                      multiple = TRUE, selected = "Washington"),
           
           helpText(strong("Note")),
-          helpText("The initial map contains all the schools in ", strong(code("2015")), 
-                   "Please select states. You can choose multple states.")
+          helpText("The initial visualization contains all the schools at ", strong(" Washington State "),
+                   " in ", strong(code("2015")), 
+                   ". Please select states. You can choose multple states."),
+          helpText(strong("The table set contains the information of the school with its website link.")),
+          br(),
+          helpText(strong("Summary")),
+          helpText("There're ", strong(num_2015), " school in total.", strong(num_no_SAT), 
+                   " schools do not require SAT score for general enrollment. 
+                   The average age of enrollment entry is ", round(avg_age$avg.age[1], 0),
+                   ". The highest in-state tuition is "),
+          br(),
+          helpText(strong("Footnote: ")),
+          helpText(strong(code("UnitID: ")), "Unit ID for institution"),
+          helpText(strong(code("Avg.SAT: ")), "The average score of SAT."),
+          helpText("The '0' values mean that SAT do not be requried.")
         ),
 
         mainPanel(
-          h4("Here's a map visualization only for ", strong(code("2015")), " . 
-             Please be patient for plotting. Use mouse to hover over the bubble to see the data.
+          br(),
+          h4("The map visualization contains all the schools in ", strong(code("2015")), "."),
+          h4("Please be patient for plotting. Use mouse to hover over the ", 
+             strong("Markers"), " to see the detail. 
              Select states if you like."),
           br(),
-          leafletOutput('map')
+          leafletOutput('map'),
+          br(),
+          DT::dataTableOutput('maptable')
         )
       )
     ),
