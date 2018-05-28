@@ -11,6 +11,7 @@ library(DT)
 library(RColorBrewer)
 library(ggmap)
 source("process.R")
+#install.packages("ggmap")
 
 #-------------------------------------------------------------------------
 ui <- fluidPage(
