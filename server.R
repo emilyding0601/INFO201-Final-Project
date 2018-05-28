@@ -11,12 +11,30 @@ server <- function(input, output) {
 
   #---------------------------------------------------------------------------------
 # This is for admission rate Panel
- output$college_names <- renderUI({
-   statewise_college <- unique(filter(admission, 
-                                      State.Postcode == state.abb[match(input$state, state.name)])$Institution.Name)
-   statewise_college <- statewise_college[order(statewise_college)]
-   selectInput("school", label = "College Option", c(Choose = 'All', as.list(statewise_college)), selectize = FALSE)
- })
+  output$college_names <- renderUI({
+    statewise_college <- unique(filter(admission, 
+                                       State.Postcode == state.abb[match(input$state, state.name)])$Institution.Name)
+    statewise_college <- statewise_college[order(statewise_college)]
+    selectInput('school', label = "College Option (Select or Type)", 
+                choices =  c("", as.list(statewise_college)), 
+                multiple = F, selected = F)
+  })
+  
+  output$college_names_2 <- renderUI({
+    all_college_names <- unique(admission$Institution.Name)
+    all_college_names <- all_college_names[order(all_college_names)]
+    selectInput('school_2', label = "Type in one College name", 
+                choices =  c("", as.list(all_college_names)), 
+                multiple = F, selected = F)
+  })
+  
+  filtered_for_college_name_2 <- reactive({
+    admission_table_select_2 <- admission %>%
+      select(Institution.Name, State.Postcode, Year, Admission.Rate) %>%
+      filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
+      filter(Institution.Name == input$school_2)
+    return(admission_table_select_2)
+  })
   
   filtered <- reactive({
     admission_table_select <- admission %>%
@@ -29,26 +47,33 @@ server <- function(input, output) {
   
   
   output$admission_table <- renderDataTable({
-    if(input$state == 'All' & input$school == 'All') {
+    if(input$state == '' & input$school == '' & input$school_2 == '') {
       admission_table_select <- admission %>%
+        filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
         select(Institution.Name, State.Postcode, Year, Admission.Rate)
       admission_table_select
-    } else if(input$state != 'All' & input$school == 'All') {
+    } else if(input$state != '' & input$school == '' & input$school_2 == '') {
       admission_table_select <- admission %>%
         select(Institution.Name, State.Postcode, Year, Admission.Rate) %>%
         filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
         filter(State.Postcode == state.abb[match(input$state,state.name)])
       admission_table_select
-      } else{
+      } else if(input$state != '' & input$school != '' & input$school_2 == '') {
         filtered()
+      } else if(input$state == '' & input$school == '' & input$school_2 != '') {
+        filtered_for_college_name_2()
       }
   })
   
   output$admission_rate_ui <- renderUI({
-    if(input$school == 'All'){
+    if(input$school == '' & input$school_2 == ''){
       return(h4(strong("Please choose a school first.")))
+    } else if(input$school != '' & input$school_2 == '') {
+      plotlyOutput("admission_rate_plot")
+    } else if(input$school == '' & input$school_2 != '') {
+      plotlyOutput("admission_rate_plot_2")
     } else {
-    plotlyOutput("admission_rate_plot")
+      return(h4(strong("Selection conflict: You can only use one selection method.")))
     }
   })
 
@@ -64,8 +89,28 @@ server <- function(input, output) {
        )
      plot1 <- ggplotly(plot1)
    })
+   
+   output$admission_rate_plot_2 <- renderPlotly({
+     plot2 <- ggplot(data = filtered_for_college_name_2(), mapping = aes(x = Year, y = Admission.Rate)) +
+       geom_point(aes()) +
+       geom_line(aes()) +
+       labs(
+         title = "Admission Rate vs. Year",
+         x = "Year",
+         y = "Admission Rate"
+       )
+     plot2 <- ggplotly(plot2)
+   })
 #---------------------------------------------------------------------------------
 # This is for SAT Panel
+   filtered_for_college_name_SAT <- reactive({
+     SAT_table_select_2 <- admission %>%
+       select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
+       filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
+       filter(Institution.Name == input$school_2)
+     return(SAT_table_select_2)
+   })
+
   filtered_2 <- reactive({
     SAT_table_select <- admission %>%
       select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
@@ -77,31 +122,39 @@ server <- function(input, output) {
   
   
   output$SAT_table <- renderDataTable({
-    if(input$state == 'All' & input$school == 'All') {
+    if(input$state == '' & input$school == '' & input$school_2 == '') {
       SAT_table_select <- admission %>%
+        filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
         select(Institution.Name, State.Postcode, Year, Avg.SAT)
       SAT_table_select
-    } else if(input$state != 'All' & input$school == 'All') {
+    } else if(input$state != '' & input$school == '' & input$school_2 == '') {
       SAT_table_select <- admission %>%
         select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
         filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
         filter(State.Postcode == state.abb[match(input$state,state.name)])
       SAT_table_select
-    } else{
+    } else if(input$state != '' & input$school != '' & input$school_2 == ''){
       filtered_2()
+    } else if(input$state == '' & input$school == '' & input$school_2 != '') {
+      filtered_for_college_name_SAT()
     }
   })
   
+  
   output$SAT_ui <- renderUI({
-    if(input$school == 'All'){
+    if(input$school == '' & input$school_2 == '') {
       return(h4(strong("Please choose a school first.")))
-    } else {
+    } else if(input$school != '' & input$school_2 == '') {
       plotlyOutput("SAT_plot")
+    } else if(input$school == '' & input$school_2 != '') {
+      plotlyOutput("SAT_plot_2")
+    } else {
+      return(h4(strong("Selection conflict: You can only use one selection method.")))
     }
   })
   
   output$SAT_plot <- renderPlotly({
-    plot2 <- ggplot(data = filtered_2(), mapping = aes(x = Year, y = Avg.SAT)) +
+    plot3 <- ggplot(data = filtered_2(), mapping = aes(x = Year, y = Avg.SAT)) +
       geom_point(aes()) +
       geom_line(aes()) +
       labs(
@@ -109,9 +162,20 @@ server <- function(input, output) {
         x = "Year",
         y = "Average SAT Score"
       )
-    plot2 <- ggplotly(plot2)
+    plot3 <- ggplotly(plot3)
   })
 
+  output$SAT_plot_2 <- renderPlotly({
+    plot4 <- ggplot(data = filtered_for_college_name_SAT(), mapping = aes(x = Year, y = Avg.SAT)) +
+      geom_point(aes()) +
+      geom_line(aes()) +
+      labs(
+        title = "Average SAT Score vs. Year",
+        x = "Year",
+        y = "Average SAT Score"
+      )
+    plot4 <- ggplotly(plot4)
+  })
   #---------------------------------------------------------------------------------
   # generate the map
   output$map <- renderLeaflet({
