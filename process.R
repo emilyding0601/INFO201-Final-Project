@@ -86,12 +86,12 @@ getState <- function(states) {
 }
 
 # Create a color palette with handmade bins.
-bins <- seq(min(df_2015$Enrollment), max(df_2015$Enrollment), by = 2000)
-palette <- colorBin(palette = "Spectral",
-                    domain = df_2015$Enrollment,
-                    na.color = "transparent", bins = bins)
+# bins <- seq(min(df_2015$Enrollment), max(df_2015$Enrollment), by = 2000)
+# palette <- colorBin(palette = "Spectral",
+#                     domain = df_2015$Enrollment,
+#                     na.color = "transparent", bins = bins)
 
-# Prepar the text for the tooltip:
+# Prepar the text for the itnitial map:
 text <- paste(df_2015$Institution.Name, "<br/>",
               "Enrollment Number: ", df_2015$Enrollment, "<br/>", 
               "In-state Tuition: ", df_2015$`In-State.Tuition`, "<br/>",
@@ -99,4 +99,3 @@ text <- paste(df_2015$Institution.Name, "<br/>",
               "Admission Rate: ", df_2015$Admission.Rate, "<br/>",
               "Average Age: ", round(df_2015$Avg.Age, 0), "<br/>",
               sep = "") %>% lapply(htmltools::HTML)
-
