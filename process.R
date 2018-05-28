@@ -6,6 +6,7 @@ library("tidyr")
 library("ggplot2")
 library("dplyr")
 library("plotly")
+library("RColorBrewer")
 
 df_2006_2015 <- read.csv("data/MERGED2006-2015.csv", stringsAsFactors = FALSE)
 
@@ -22,7 +23,7 @@ col <- c("Year", "UnitID", "OPEID", "Institution.Name", "City",
 colnames(df_2006_2015) <- col
 
 # transfer the mode for some columns
-df_2006_2015[, 14:18] <- as.numeric(unlist(df_2006_2015[, 14:18]))
+df_2006_2015[, 14:18] <- as.numeric(unlist(df_2006_2015[, 14:18]), na.rm = TRUE)
 
 # a function to calculate the total number of school in each year
 num_schools <- function(year) {
@@ -43,7 +44,7 @@ num_school_table <- data.frame(Year = c(2006:2015),
                                                 num_schools(2015)), stringsAsFactors = FALSE)
 
 # admission table for the `admission`
-names(df_2006_2015)
+
 admission <- df_2006_2015 %>% select(1, (4:6), (8:10))
 summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") %>% summary()
 
@@ -52,8 +53,50 @@ summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") 
 avg_age_year <- df_2006_2015 %>% group_by(Year, State.Postcode) %>% 
   summarize(avg.age_year = mean(Avg.Age,  na.rm = TRUE))
 
-## For map
+#### For map
 # extract the data from the raw data set
-
 df_2015 <- read.csv("data/MERGED2015.csv", stringsAsFactors = FALSE)
+
+# set a var to change the column name
+col_2015 <- c("Year", "UnitID", "OPEID", "Institution.Name", "City",
+              "State.Postcode", "Zipcode", "Institution.URL", "Lat", "Long", 
+              "Admission.Rate", "Admission.Rate.For.All",
+              "Avg.SAT", "Enrollment", "In-State.Tuition", "Out-State.Tuition",
+              "Net.Tuition.Revenue", "Instructional.Expenditures", "Avg.Faculty.Salary",
+              "Percent.1st-generation", "Avg.Age", "Total.Enrolled.Men", "Total.Enrolled.Women",
+              "Open.Admissions.Policy")
+
+colnames(df_2015) <- col_2015
+
+# sapply(df_2015, class)
+
+# mutate 
+
+
+# set numeric type for several columns
+df_2015[, 20:21] <- as.numeric(unlist(df_2015[, 20:21]), na.rm = TRUE)
+
+cities <- as.vector(unique(df_2015$City))
+
+## for server.R
+# select state data
+getState <- function(states) {
+  selected <- df_2015 %>% filter(State.Postcode %in% state.abb[match(states, state.name)])
+  selected
+}
+
+# Create a color palette with handmade bins.
+# bins <- seq(min(df_2015$Enrollment), max(df_2015$Enrollment), by = 2000)
+# palette <- colorBin(palette = "Spectral",
+#                     domain = df_2015$Enrollment,
+#                     na.color = "transparent", bins = bins)
+
+# Prepar the text for the itnitial map:
+text <- paste(df_2015$Institution.Name, "<br/>",
+              "Enrollment Number: ", df_2015$Enrollment, "<br/>", 
+              "In-state Tuition: ", df_2015$`In-State.Tuition`, "<br/>",
+              "Out-state Tuition: ", df_2015$`Out-State.Tuition`, "<br/>",
+              "Admission Rate: ", df_2015$Admission.Rate, "<br/>",
+              "Average Age: ", round(df_2015$Avg.Age, 0), "<br/>",
+              sep = "") %>% lapply(htmltools::HTML)
 

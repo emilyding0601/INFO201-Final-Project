@@ -119,14 +119,7 @@ ui <- fluidPage(
               "Visualization",
               plotOutput("Tuitionvsfaculty")
             ),
-            #
-            #     tabPanel(
-            #
-            #         "Tuition",
-            #        plotOutput('Tuitionvsfaculty') # 3rd plot: in-state & out-state vs faculty salary
-            #         DT::dataTableOutput("tuition_table") # table of in-state & out-state
-            #      ),
-
+            
             tabPanel(
               "Expenditure",
               plotOutput("expenditurevsfaculty") # 4th plot: expenditure vs faculty salary
@@ -165,13 +158,25 @@ ui <- fluidPage(
       "Map",
       sidebarLayout(
         sidebarPanel(
-          textInput("city", label = "City"),
-          textInput("state", label = "State"),
-          textInput("university", label = "University")
+          selectInput('state_map', label = "Select Your State(s)", 
+                      choices =  c(state.name), 
+                      multiple = TRUE, selected = "Choose"),
+# 
+#           selectInput('city_map', label = "Select Your Cities",
+#                       choices = c(unique(df_2015$City)),
+#                       multiple = TRUE, selected = "Choose"),
+          
+          helpText(strong("Note")),
+          helpText("The initial map contains all the schools in ", strong(code("2015")), 
+                   "Please select states. You can choose multple states.")
         ),
 
         mainPanel(
-          leaflet("map")
+          h4("Here's a map visualization only for ", strong(code("2015")), " . 
+             Please be patient for plotting. Use mouse to hover over the bubble to see the data.
+             Select states if you like."),
+          br(),
+          leafletOutput('map')
         )
       )
     ),
