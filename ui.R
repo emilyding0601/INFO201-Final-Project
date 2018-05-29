@@ -38,29 +38,39 @@ ui <- fluidPage(
     # Admissions tabe on navigation bar
     tabPanel(
       "Admissions",
-      # Sidebar for input widgets
-      sidebarLayout(
-        sidebarPanel(
-          #h5(strong("Note")),
-          p("Select Range"),
-          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
-          
+      #sidebarLayout(
+      fluidRow(
+        column(4,
+          wellPanel(
+           p("Select Range"),
+           sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+           br(),
+           p("Select State and/or College"),
+           helpText("There are ", strong("two"), "selection method, you can only use one at a time."),
+           
+           helpText("1) You can", strong(code("select or type")), "a state first and then",
+                    strong(code("select or type")), "a college in that state."),
+           selectInput('state', label = "State Option (Select or Type)",
+                       choices =  c("", state.name),
+                       multiple = F, selected = F),
+           uiOutput("college_names"),
+           
+           helpText("2) You can", strong(code("type")), "the college name directly."),
+           uiOutput("college_names_2")
+        ), 
+        wellPanel(
+          h4(strong("Summary:")),
           br(),
-          #h5(strong("Note")),
-          p("Select State and/or College"),
-          helpText("There are ", strong("two"), "selection method, you can only use one at a time."),
-          #p("There are", strong(("two")), "selection methods, you can only use ", strong("one"), "at a time."),
-          #p("But you can only use", strong(code("one")), "of the selection methods:"),
-          helpText("1) You can", strong(code("select or type")), "a state first and then", 
-                   strong(code("select or type")), "a college in that state."),
-          selectInput('state', label = "State Option (Select or Type)", 
-                      choices =  c("", state.name), 
-                      multiple = F, selected = F),
-          uiOutput("college_names"),
-          
-          helpText("2) You can", strong(code("type")), "the college name directly."),
-          uiOutput("college_names_2")
-        ),
+          p("After observing recent year's admission rate and admitted students' average SAT score of many colleges,
+            we noticed that most of the schools, especially schools with academic prestige, have an downward trend
+            of admission rate and an upward trend of admitted students' average SAT score. That is, most colleges
+            are harder and harder to get into."),
+          br(),
+          p("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
+            a certain range, about ten percent for the admission rate and fifty points for the SAT score.")
+        )
+      ),
+
         #-------------------------------------------------------------------------
         mainPanel(
           tabsetPanel(
@@ -86,20 +96,6 @@ ui <- fluidPage(
               uiOutput("SAT_ui"),
               em(tags$p("All scores are converted to the latest SAT with the total score of", strong(code("1600")), ".")),
               em(tags$p("Not all schools have 2006-2015 SAT score data available."))
-            ),
-            #-------------------------------------------------------------------------
-            tabPanel(
-              "Summary",
-              br(),
-              h4(strong("Summary:")),
-              br(),
-              p("After observing recent year's admission rate and admitted students' average SAT score of many colleges,
-                we noticed that most of the schools, especially schools with academic prestige, have an downward trend
-                of admission rate and an upward trend of admitted students' average SAT score. That is, most colleges
-                are harder and harder to get into."),
-              br(),
-              p("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
-                a certain range, about ten percent for the admission rate and fifty points for the SAT score.")
             )
           )
         )
