@@ -79,7 +79,8 @@ df_2015[, 20:21] <- as.numeric(unlist(df_2015[, 20:21]), na.rm = TRUE)
 
 cities <- as.vector(unique(df_2015$City))
 
-## Adding latitude and longitude to `null` values
+#### Need these codes for record!
+#### Adding latitude and longitude to `null` values
 # null <- df_2015 %>% filter(Lat == 0, Long == 0)
 # 
 # loc <- geocode(as.character(null$Institution.Name))
@@ -105,19 +106,19 @@ text <- paste("<h4/>", df_2015$Institution.Name, "<br/>", "<br/>",
               "Out-state Tuition: ", " $", df_2015$`Out-State.Tuition`, "<br/>",
               "Admission Rate: ", round(df_2015$Admission.Rate, 2) * 100, "%", "<br/>",
               "Average Age: ", round(df_2015$Avg.Age, 0), "<br/>",
-<<<<<<< HEAD
               sep = "") %>% lapply(htmltools::HTML)
-
-# map data table
-map_data <- df_2015 %>% select(UnitID, Institution.Name, Institution.URL, Avg.SAT)
 
 # extract the data number for `ui map`
 num_2015 <- nrow(df_2015)
 num_no_SAT <- df_2015 %>% filter(Avg.SAT == '0') %>% nrow()
-avg_age <- df_2015 %>% group_by(Year) %>% 
-  summarize(avg.age = mean(Avg.Age,  na.rm = TRUE))
 
-max_tuition <- df_2015
-=======
-              sep = "") %>% lapply(htmltools::HTML)
->>>>>>> 517aabbd4ce19669aba751250f0d278fbbdc10c3
+summary <- df_2015 %>% 
+  summarize(avg.in.tuition = mean(`In-State.Tuition`, na.rm = TRUE),
+            avg.out.tuition = mean(`Out-State.Tuition`, na.rm = TRUE),
+            avg.age = mean(Avg.Age,  na.rm = TRUE))
+
+# function get the top column info
+max_col <- function(var) {
+  col <- df_2015 %>% arrange(-var) %>% head(1)
+  col
+}

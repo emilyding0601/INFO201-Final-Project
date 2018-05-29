@@ -177,34 +177,57 @@ ui <- fluidPage(
     # Map of 2015 Universities
     tabPanel(
       "Map",
-      sidebarLayout(
-        sidebarPanel(
-          selectizeInput('state_map', label = "Select Your State(s)", 
-                      choices =  c(state.name), 
-                      multiple = TRUE, selected = "Washington"),
-          
-          helpText(strong("Note")),
+      fluidRow(
+        column(3,
+               wellPanel(
+                 h5(strong("Select the state(s)")),
+                 selectInput('state_map', label = "",
+                              choices =  c(state.name), 
+                              multiple = TRUE, selected = "Washington", selectize = FALSE),
+          br(),
+          h5(strong("How to use?")),
           helpText("The initial visualization contains all the schools at ", strong(" Washington State "),
                    " in ", strong(code("2015")), 
-                   ". Please select states. You can choose multple states."),
-          helpText(strong("The table set contains the information of the school with its website link.")),
-          br(),
-          helpText(strong("Summary")),
+                   ". Please select states. 
+                   You can choose multple states by ", strong(code("'Ctrl' + left click")), 
+                   " in",strong(" Windows"), " OR ", strong(code("'Command' + left click")), 
+                   " in",strong(" Mac"), "."),
+          helpText(strong("The table set contains the information of the school with its website link."))
+        ),
+        wellPanel(
+          # add the summary
+          h5(strong("Summary")),
           helpText("There're ", strong(num_2015), " school in total.", strong(num_no_SAT), 
                    " schools do not require SAT score for general enrollment. 
-                   The average age of enrollment entry is ", round(avg_age$avg.age[1], 0),
-                   ". The highest in-state tuition is "),
-          br(),
-          helpText(strong("Footnote: ")),
+                 The average age of enrollment entry is ", strong(round(summary$avg.age[1], 0)),
+                   " years old. The average in-state tuition is ", strong("$", round(summary$avg.in.tuition[1], 2)),
+                   ". The average out-state tuition is ", strong("$", round(summary$avg.out.tuition[1], 2)),
+                   ". The most expensive tuition is ", strong("$", max_col(df_2015$`In-State.Tuition`)$`In-State.Tuition`[1]), 
+                   ", which is ", strong(max_col(df_2015$`In-State.Tuition`)$Institution.Name[1]),
+                   ". The highest average SAT score is ", strong(max_col(df_2015$Avg.SAT)$Avg.SAT[1]), 
+                   ", which is ", strong(max_col(df_2015$Avg.SAT)$Institution.Name[1]), 
+                   " with ", strong("$", max_col(df_2015$Avg.SAT)$`In-State.Tuition`[1]),
+                   " tuition for both in & out-state. The average age for enrollment is ",
+                   strong(round(max_col(df_2015$Avg.SAT)$Avg.Age[1])), " years old.")
+
+        ),
+        wellPanel(
+          # add the footnote
+          h5(strong("Footnote: ")),
           helpText(strong(code("UnitID: ")), "Unit ID for institution"),
           helpText(strong(code("Avg.SAT: ")), "The average score of SAT."),
-          helpText("The '0' values mean that SAT do not be requried.")
-        ),
-
-        mainPanel(
+          helpText("The '0' values mean that SAT do not be requried."),
+          helpText(strong(code("Open.Admissions.Policy: ")), 
+                   "Open admissions policy indicator,", strong("1"), " - YES.",
+                   strong(" 2"), " - No.")
+          
+        )
+      ),
+      
+        column(9,
           br(),
-          h4("The map visualization contains all the schools in ", strong(code("2015")), "."),
-          h4("Please be patient for plotting. Use mouse to hover over the ", 
+          h5("The map visualization contains all the schools in ", strong(code("2015")), "."),
+          h5("Please be patient for plotting. Use mouse to hover over the ", 
              strong("Markers"), " to see the detail. 
              Select states if you like."),
           br(),

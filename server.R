@@ -174,46 +174,6 @@ server <- function(input, output) {
   })
   #---------------------------------------------------------------------------------
   # generate the maps
-  
-  # observe({
-  # 
-  #   filtered_city <- getCity(input$city_map)
-  # 
-  #   text <- paste("<h4/>", filtered_city$Institution.Name, "<br/>", "<br/>",
-  #                 "Enrollment Number: ", filtered_city$Enrollment, "<br/>", 
-  #                 "In-state Tuition: ", filtered_city$`In-State.Tuition`, "<br/>",
-  #                 "Out-state Tuition: ", filtered_city$`Out-State.Tuition`, "<br/>",
-  #                 "Admission Rate: ", filtered_city$Admission.Rate, "<br/>",
-  #                 "Average Age: ", round(filtered_city$Avg.Age, 0), "<br/>",
-  #                 sep = "") %>% lapply(htmltools::HTML)
-  # 
-  #   leafletProxy('map') %>% clearMarkers() %>%
-  #     addCircleMarkers(lng = filtered_city$Long,
-  #                      lat = filtered_city$Lat,
-  #                      label = text)
-  # 
-  # 
-  # })
-
-  # observe({
-  # 
-  #   filtered_state_city <- getState(input$state_map) %>% filter(City == input$city_map)
-  # 
-  #   text <- paste("<h4/>", filtered_state_city$Institution.Name, "<br/>", "<br/>",
-  #                 "Enrollment Number: ", filtered_state_city$Enrollment, "<br/>", 
-  #                 "In-state Tuition: ", filtered_state_city$`In-State.Tuition`, "<br/>",
-  #                 "Out-state Tuition: ", filtered_state_city$`Out-State.Tuition`, "<br/>",
-  #                 "Admission Rate: ", filtered_state_city$Admission.Rate, "<br/>",
-  #                 "Average Age: ", round(filtered_state_city$Avg.Age, 0), "<br/>",
-  #                 sep = "") %>% lapply(htmltools::HTML)
-  # 
-  #   leafletProxy('map', data = filtered_state_city) %>% clearMarkers() %>%
-  #     addCircleMarkers(lng = filtered_state_city$Long,
-  #                      lat = filtered_state_city$Lat,
-  #                      label = text)
-  # 
-  # })
-  
   observe({
     
     filtered_state <- getState(input$state_map)
@@ -252,10 +212,12 @@ server <- function(input, output) {
 
   })
   
+  ## add the summary table with hyperlink
+  # reactive the value for output
   map_table <- reactive({
 
       filtered <- getState(input$state_map) %>%
-        select(UnitID, Institution.Name, Institution.URL, Avg.SAT)
+        select(UnitID, Institution.Name, Institution.URL, Avg.SAT, Admission.Rate, Open.Admissions.Policy)
 
       filtered$Institution.URL <- paste0("<a href='",filtered$Institution.URL,"'>", 
                                          filtered$Institution.URL,"</a>")
@@ -263,12 +225,11 @@ server <- function(input, output) {
     return(filtered)
   })
 
+  # output the table
   output$maptable <- DT::renderDataTable({
       
-    # has a bug: cannot empty the ``selectInput
       DT::datatable(map_table(), escape = FALSE)
-    
-    
+
   })
     
 }
