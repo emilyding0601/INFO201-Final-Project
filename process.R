@@ -1,12 +1,16 @@
+########################
+### Install Packages ###
+########################
+
+# install.packages("shinythemes")
+# install.packages("ggmap")
+
 ############
 ## SET UP ##
 ############
 
-library("tidyr")
-library("ggplot2")
-library("dplyr")
-library("plotly")
-library("RColorBrewer")
+library(dplyr)
+library(ggmap)
 
 df_2006_2015 <- read.csv("data/MERGED2006-2015.csv", stringsAsFactors = FALSE)
 
@@ -84,10 +88,7 @@ col_2015 <- c("Year", "UnitID", "OPEID", "Institution.Name", "City",
 
 colnames(df_2015) <- col_2015
 
-# sapply(df_2015, class)
-
-# mutate 
-
+sapply(df_2015, class)
 
 # set numeric type for several columns
 df_2015[, 20:21] <- as.numeric(unlist(df_2015[, 20:21]), na.rm = TRUE)
@@ -101,17 +102,39 @@ getState <- function(states) {
   selected
 }
 
-# Create a color palette with handmade bins.
-# bins <- seq(min(df_2015$Enrollment), max(df_2015$Enrollment), by = 2000)
-# palette <- colorBin(palette = "Spectral",
-#                     domain = df_2015$Enrollment,
-#                     na.color = "transparent", bins = bins)
-
 # Prepar the text for the itnitial map:
-text <- paste(df_2015$Institution.Name, "<br/>",
+text <- paste("<h4/>", df_2015$Institution.Name, "<br/>", "<br/>",
               "Enrollment Number: ", df_2015$Enrollment, "<br/>", 
-              "In-state Tuition: ", df_2015$`In-State.Tuition`, "<br/>",
-              "Out-state Tuition: ", df_2015$`Out-State.Tuition`, "<br/>",
-              "Admission Rate: ", df_2015$Admission.Rate, "<br/>",
+              "In-state Tuition: ", " $", df_2015$`In-State.Tuition`, "<br/>",
+              "Out-state Tuition: ", " $", df_2015$`Out-State.Tuition`, "<br/>",
+              "Admission Rate: ", round(df_2015$Admission.Rate, 2) * 100, "%", "<br/>",
               "Average Age: ", round(df_2015$Avg.Age, 0), "<br/>",
               sep = "") %>% lapply(htmltools::HTML)
+
+# extract the data number for `ui map`
+num_2015 <- nrow(df_2015)
+num_no_SAT <- df_2015 %>% filter(Avg.SAT == '0') %>% nrow()
+
+summary <- df_2015 %>% 
+  summarize(avg.in.tuition = mean(`In-State.Tuition`, na.rm = TRUE),
+            avg.out.tuition = mean(`Out-State.Tuition`, na.rm = TRUE),
+            avg.age = mean(Avg.Age,  na.rm = TRUE))
+
+# function get the top column info
+max_col <- function(var) {
+  col <- df_2015 %>% arrange(-var) %>% head(1)
+  col
+}
+
+#### Need these codes for record!
+#### Adding latitude and longitude to `null` values
+# null <- df_2015 %>% filter(Lat == 0, Long == 0)
+# 
+# loc <- geocode(as.character(null$Institution.Name))
+# 
+# df_2015[df_2015$Lat == "0" ,c("Lat")] <- loc$lat
+# df_2015[df_2015$Long == "0" ,c("Long")] <- loc$lon
+# 
+# View(df_2015)
+# 
+# write.csv(df_2015, "data/MERGED2015.csv", row.names = FALSE)
