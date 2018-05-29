@@ -31,7 +31,7 @@ ui <- fluidPage(
         #br(),
         #hr(),
         column(width = 6, img(src = "students.png")),
-        column(width = 5, img(src = "students.png")),
+        column(width = 6, img(src = "students.png")),
         br(),
         includeHTML("overview.html")
       )
@@ -146,21 +146,6 @@ ui <- fluidPage(
       )
     ),
 
-    #-------------------------------------------------------------------------
-    tabPanel(
-      "Prediction",
-      sidebarLayout(
-        sidebarPanel(
-          h4(strong("Clarification:")),
-          p(
-            "This prediction is solely based on your", strong(code("SAT score")), ", and your desired ",
-            strong(code("cost")), strong(code("school type")), "and", strong(code("location")), 
-            "so it can be highly inaccurate. But we just want to give you an idea that what schools may suit you."
-          )
-        ),
-        mainPanel()
-      )
-    ),
 
     #-------------------------------------------------------------------------
     # Diversity (First-Gen Student) tabe on navigation bar
@@ -204,14 +189,14 @@ ui <- fluidPage(
                    You can choose multple states by ", strong(code("'Ctrl' + left click")), 
                    " in",strong(" Windows"), " OR ", strong(code("'Command' + left click")), 
                    " in",strong(" Mac"), "."),
-          helpText(strong("The table set contains the information of the school with its website link."))
+          helpText(strong("The table set contains the information of the school with its website."))
         ),
         wellPanel(
           # add the summary
           h5(strong("Summary")),
           helpText("There are ", strong(num_2015), " school in total.", strong(num_no_SAT), 
                    " schools do not require SAT score for general enrollment. 
-                 The average age of enrollment entry is ", strong(round(summary$avg.age[1], 0)),
+                   The average age of enrollment entry is ", strong(round(summary$avg.age[1], 0)),
                    " years old. The average in-state tuition is ", strong("$", round(summary$avg.in.tuition[1], 2)),
                    ". The average out-state tuition is ", strong("$", round(summary$avg.out.tuition[1], 2)),
                    ". The most expensive tuition is ", strong("$", max_col(df_2015$`In-State.Tuition`)$`In-State.Tuition`[1]), 
@@ -224,22 +209,21 @@ ui <- fluidPage(
 
         ),
         wellPanel(
-          # add the footnote
-          h5(strong("Footnote: ")),
-          helpText(strong(code("UnitID: ")), "Unit ID for institution"),
-          helpText(strong(code("Avg.SAT: ")), "The average score of SAT."),
-          helpText("The '0' values mean that SAT do not be requried."),
-          helpText(strong(code("Open.Admissions.Policy: ")), 
-                   "Open admissions policy indicator,", strong("1"), " - YES.",
-                   strong(" 2"), " - No.")
-          
+          # add the legend
+          h5(strong("Legend:")),
+          helpText(strong(code("UnitID:")), "Unit ID for institution"),
+          helpText(strong(code("Avg.SAT:")), "The average score of SAT, values of \"0\" mean 
+                   there is no SAT score provided."),
+          helpText(strong(code("Open.Admissions.Policy:")), 
+                   "Open admissions policy indicator,", strong("1"), " - Yes.",
+                   strong("2"), " - No.")
         )
       ),
       
         column(9,
           br(),
           h5("The map visualization contains all the schools in ", strong(code("2015")), "."),
-          h5("Please wait for Plot to load. Use mouse to hover over the ", 
+          h5("Please wait for plot to load. Use mouse to hover over the ", 
              strong("Markers"), " to see the detail. 
              Select states if you like."),
           br(),
