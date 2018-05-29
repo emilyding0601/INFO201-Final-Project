@@ -118,7 +118,7 @@ ui <- fluidPage(
           helpText("If you", strong("don't belong to any state,"), 
                    "(such as International Students), leave it", strong("blank")),
           
-          selectInput('state_for_cost', label = "State Option (Select or Type)", 
+          selectInput('state_for_cost', label = "Your state residence (Select or Type)", 
                       choices =  c("", state.name), 
                       multiple = F, selected = F),
           br(),
