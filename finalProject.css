@@ -11,8 +11,21 @@ nav.navbar {
 }
 
 /* Styling for the finalProject.html file */
-main, p {
+main {
   margin: 25px;
-  font-family: serif;
-  font-size: 12pt;
+}
+p, li {
+  font-size: 16pt;
+}
+
+h1, p , li {
+  font-family: Garamond, serif;
+}
+
+#top {
+  margin-top: 200px;
+}
+
+.html {
+  text-indent: 25px;
 }
