@@ -7,7 +7,7 @@
 Our project focuses on propestive students giving them information on universities throughout the country. It contains a multitude of information about each university. This data can provides information on universities a prospective student may want or need in order to decide on what institution they might attend. 
 ***
 
-#### Data set
+#### Data Set
 
 The data set we decided to use was provided from https://collegescorecard.ed.gov/data in .csv files. Information for the universities is provided from 2006 to 2015. The map data is from 2015 only. 
 ***
