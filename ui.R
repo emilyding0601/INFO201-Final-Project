@@ -209,7 +209,7 @@ ui <- fluidPage(
         wellPanel(
           # add the summary
           h5(strong("Summary")),
-          helpText("There're ", strong(num_2015), " school in total.", strong(num_no_SAT), 
+          helpText("There are ", strong(num_2015), " school in total.", strong(num_no_SAT), 
                    " schools do not require SAT score for general enrollment. 
                  The average age of enrollment entry is ", strong(round(summary$avg.age[1], 0)),
                    " years old. The average in-state tuition is ", strong("$", round(summary$avg.in.tuition[1], 2)),
@@ -239,7 +239,7 @@ ui <- fluidPage(
         column(9,
           br(),
           h5("The map visualization contains all the schools in ", strong(code("2015")), "."),
-          h5("Please be patient for plotting. Use mouse to hover over the ", 
+          h5("Please wait for Plot to load. Use mouse to hover over the ", 
              strong("Markers"), " to see the detail. 
              Select states if you like."),
           br(),
