@@ -9,7 +9,7 @@ Our project focuses on propestive students giving them information on universiti
 
 #### Data set
 
-The data set we decided to use was provided from https://collegescorecard.ed.gov/data in .csv files. Information for the universities is provided from 2006 to 2015. THe map data is from 2015 only. 
+The data set we decided to use was provided from https://collegescorecard.ed.gov/data in .csv files. Information for the universities is provided from 2006 to 2015. The map data is from 2015 only. 
 ***
 
 #### Approach
