@@ -231,7 +231,6 @@ server <- function(input, output) {
       DT::datatable(map_table(), escape = FALSE)
 
   })
-    
 }
 
 shinyServer(server)

@@ -18,7 +18,7 @@ ui <- fluidPage(
   includeCSS("finalProject.css"),
 
   #-------------------------------------------------------------------------
-  # Top navigation bar for Home, Admission, Cost, Diversity, Conclusion
+  # Top navigation bar for Overview, Admission, Cost, Diversity, Conclusion
   navbarPage(
     "College Score Card Data",
 
@@ -143,7 +143,7 @@ ui <- fluidPage(
           p(
             "This prediction is solely based on your", strong(code("SAT score")), ", and your desired ",
             strong(code("cost")), "and", strong(code("location")), "so it can be highly inaccurate. 
-        But we just want to give you an idea that what schools may suit you."
+            But we just want to give you an idea that what schools may suit you."
           )
         ),
         mainPanel()

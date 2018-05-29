@@ -79,19 +79,6 @@ df_2015[, 20:21] <- as.numeric(unlist(df_2015[, 20:21]), na.rm = TRUE)
 
 cities <- as.vector(unique(df_2015$City))
 
-#### Need these codes for record!
-#### Adding latitude and longitude to `null` values
-# null <- df_2015 %>% filter(Lat == 0, Long == 0)
-# 
-# loc <- geocode(as.character(null$Institution.Name))
-# 
-# df_2015[df_2015$Lat == "0" ,c("Lat")] <- loc$lat
-# df_2015[df_2015$Long == "0" ,c("Long")] <- loc$lon
-# 
-# View(df_2015)
-# 
-# write.csv(df_2015, "data/MERGED2015.csv", row.names = FALSE)
-
 ## for server.R
 # select state data
 getState <- function(states) {
@@ -122,3 +109,16 @@ max_col <- function(var) {
   col <- df_2015 %>% arrange(-var) %>% head(1)
   col
 }
+
+#### Need these codes for record!
+#### Adding latitude and longitude to `null` values
+# null <- df_2015 %>% filter(Lat == 0, Long == 0)
+# 
+# loc <- geocode(as.character(null$Institution.Name))
+# 
+# df_2015[df_2015$Lat == "0" ,c("Lat")] <- loc$lat
+# df_2015[df_2015$Long == "0" ,c("Long")] <- loc$lon
+# 
+# View(df_2015)
+# 
+# write.csv(df_2015, "data/MERGED2015.csv", row.names = FALSE)
