@@ -27,9 +27,6 @@ ui <- fluidPage(
       "Overview",
       # add fluid rows for banner image and overview
       fluidRow(
-
-        #br(),
-        #hr(),
         column(width = 6, img(src = "students.png")),
         column(width = 6, img(src = "students.png")),
         br(),
@@ -44,14 +41,16 @@ ui <- fluidPage(
       # Sidebar for input widgets
       sidebarLayout(
         sidebarPanel(
-          h5(strong("Note")),
-          helpText("Choose a ", strong("Year"), " range"),
+          #h5(strong("Note")),
+          p("Select Range"),
           sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
           
           br(),
-          h5(strong("Note")),
-          p("You have", strong(code("two")), "choices of college selection,"),
-          p("But you can only use", strong(code("one")), "of the selection methods:"),
+          #h5(strong("Note")),
+          p("Select State and/or College"),
+          helpText("There are ", strong("two"), "selection method, you can only use one at a time."),
+          #p("There are", strong(("two")), "selection methods, you can only use ", strong("one"), "at a time."),
+          #p("But you can only use", strong(code("one")), "of the selection methods:"),
           helpText("1) You can", strong(code("select or type")), "a state first and then", 
                    strong(code("select or type")), "a college in that state."),
           selectInput('state', label = "State Option (Select or Type)", 
