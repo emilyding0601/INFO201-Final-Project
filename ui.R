@@ -61,9 +61,9 @@ ui <- fluidPage(
         wellPanel(
           h4(strong("Summary:")),
           br(),
-          p("After observing recent year's admission rate and admitted students' average SAT score of many colleges,
-            we noticed that most of the schools, especially schools with academic prestige, have an downward trend
-            of admission rate and an upward trend of admitted students' average SAT score. That is, most colleges
+          p("After observing recent years admission rate and admitted students average SAT score of multiple colleges.
+            We noticed that most of the schools, especially schools with academic prestige, have an downward trend
+            of admission rate and an upward trend of admitted students average SAT score. That is, most colleges
             are harder and harder to get into."),
           br(),
           p("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
