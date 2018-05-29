@@ -48,7 +48,23 @@ num_school_table <- data.frame(Year = c(2006:2015),
 admission <- df_2006_2015 %>% select(1, (4:6), (8:10))
 summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") %>% summary()
 
+#----------------------------------------------------
+# This is for the Cost page
+cost_page <- df_2006_2015 %>% select(1, (4:6), (12:16))
+cost_page_tution <- cost_page %>% filter(Year == "2015") %>% select(2:6)
+colnames(cost_page_tution) <- c("Institution.Name", "City", "State", "In_State_Tuition", "Out_State_Tuition")
+cost_page_tution$In_State_Tuition <- as.numeric(as.character(cost_page_tution$In_State_Tuition))
+cost_page_tution$Out_State_Tuition <- as.numeric(as.character(cost_page_tution$Out_State_Tuition))
 
+for (i in 1:nrow(cost_page_tution)) {
+  if (cost_page_tution$In_State_Tuition[i] == cost_page_tution$Out_State_Tuition[i]) {
+    cost_page_tution$school_type[i] <- "private"
+  } else {
+    cost_page_tution$school_type[i] <- "public"
+  }
+}
+
+#----------------------------------------------------
 # average age by year in each state
 avg_age_year <- df_2006_2015 %>% group_by(Year, State.Postcode) %>% 
   summarize(avg.age_year = mean(Avg.Age,  na.rm = TRUE))

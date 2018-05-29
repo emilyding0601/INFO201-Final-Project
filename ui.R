@@ -48,7 +48,7 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           h5(strong("Note")),
-          helpText("Choose a ", strong("Year"), " for a range"),
+          helpText("Choose a ", strong("Year"), " range"),
           sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
           
           br(),
@@ -117,21 +117,32 @@ ui <- fluidPage(
       "Cost",
       sidebarLayout(
         sidebarPanel(
-          sliderInput("year_2", "Year", 2006, 2015, value = c(2006, 2015), sep = ""), # Change range values accordingly
+          h5(strong("Note")),
+          helpText("Enter your", strong("state residence"), "."),
+          helpText("If you", strong("don't belong to any state,"), 
+                   "(such as International Students), leave it", strong("blank")),
+          
+          selectInput('state_for_cost', label = "State Option (Select or Type)", 
+                      choices =  c("", state.name), 
+                      multiple = F, selected = F),
+          br(),
+          helpText("Choose a ", strong("tuition"), " range"),
 
-          sliderInput("cost", label = "Dollars ($)", min = 0, max = 10, value = "") # Change range values accordingly
+          sliderInput("tuition_slider", "Tuition ($)", 0, 70000, value = c(0, 70000), 
+                      step = 500, pre = "$", sep = ""),
+          #helpText("Choose a ", strong("school type")),
+          #checkboxGroupInput("school_type", "School Type:", c("private", "public"), selected = c("private", "public")),
+          br()
         ),
         mainPanel(
           tabsetPanel(
             tabPanel(
-              "Visualization",
-              plotOutput("Tuitionvsfaculty")
+              "Tuition Table",
+              dataTableOutput("filter_cost_table")
             ),
-            
             tabPanel(
-              "Expenditure",
-              plotOutput("expenditurevsfaculty") # 4th plot: expenditure vs faculty salary
-              #
+              "Tuition Plot",
+              plotOutput("expenditurevsfaculty") 
             )
           )
         )
@@ -146,8 +157,8 @@ ui <- fluidPage(
           h4(strong("Clarification:")),
           p(
             "This prediction is solely based on your", strong(code("SAT score")), ", and your desired ",
-            strong(code("cost")), "and", strong(code("location")), "so it can be highly inaccurate. 
-        But we just want to give you an idea that what schools may suit you."
+            strong(code("cost")), strong(code("school type")), "and", strong(code("location")), 
+            "so it can be highly inaccurate. But we just want to give you an idea that what schools may suit you."
           )
         ),
         mainPanel()

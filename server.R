@@ -103,7 +103,7 @@ server <- function(input, output) {
    })
 #---------------------------------------------------------------------------------
 # This is for SAT Panel
-   filtered_for_college_name_SAT <- reactive({
+  filtered_for_college_name_SAT <- reactive({
      SAT_table_select_2 <- admission %>%
        select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
        filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
@@ -176,6 +176,38 @@ server <- function(input, output) {
       )
     plot4 <- ggplotly(plot4)
   })
+  
+  #---------------------------------------------------------------------------------
+  # This is for the cost page
+
+ output$filter_cost_table <- renderDataTable({
+    for (i in 1:nrow(cost_page_tution)) {
+      # International student or Private Schools
+      if (input$state_for_cost == '' | cost_page_tution$school_type[i] == "private") {
+        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State_Tuition[i]
+      } 
+      # US citizen
+      else {
+        if(cost_page_tution$school_type[i] == "public" & 
+           cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State_Tuition[i]
+        }
+        else
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State_Tuition[i]
+        }
+      }
+    }
+   cost_page_tution_select <- cost_page_tution %>%
+     filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
+   return(cost_page_tution_select)
+ })
+   
+  
+  
+ 
+  
   #---------------------------------------------------------------------------------
   # generate the maps
   
