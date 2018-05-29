@@ -48,7 +48,6 @@ num_school_table <- data.frame(Year = c(2006:2015),
                                                 num_schools(2015)), stringsAsFactors = FALSE)
 
 # admission table for the `admission`
-
 admission <- df_2006_2015 %>% select(1, (4:6), (8:10))
 summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") %>% summary()
 
@@ -102,7 +101,7 @@ getState <- function(states) {
   selected
 }
 
-# Prepar the text for the itnitial map:
+# Prepare the text for the initial map:
 text <- paste("<h4/>", df_2015$Institution.Name, "<br/>", "<br/>",
               "Enrollment Number: ", df_2015$Enrollment, "<br/>", 
               "In-state Tuition: ", " $", df_2015$`In-State.Tuition`, "<br/>",

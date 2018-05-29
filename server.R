@@ -1,8 +1,7 @@
 # Extract data set from `process.R`
 source("process.R")
 
-# The server is a function that takes
-# `input` and `output` arguments
+# The server is a function that takes `input` and `output` arguments
 server <- function(input, output) {
 
   #---------------------------------------------------------------------------------

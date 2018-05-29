@@ -27,12 +27,13 @@ ui <- fluidPage(
       "Overview",
       # add fluid rows for banner image and overview
       fluidRow(
-        h2("Left blank for HTML"),
 
-        br(),
-        hr(),
+        #br(),
+        #hr(),
         column(width = 6, img(src = "students.png")),
-        column(width = 6, img(src = "students.png"))
+        column(width = 5, img(src = "students.png")),
+        br(),
+        includeHTML("overview.html")
       )
     ),
 
