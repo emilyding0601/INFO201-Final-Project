@@ -38,25 +38,14 @@ ui <- fluidPage(
     #-------------------------------------------------------------------------
     # Admissions tabe on navigation bar
     tabPanel(
-<<<<<<< HEAD
       "School Search",
-      # Sidebar for input widgets
-      sidebarLayout(
-        sidebarPanel(
-          #h5(strong("Note")),
-          p("If you are interested in a particular school, you can use this page to search it and 
-            find out its admission rate and average SAT score in recent years."),
-          p("Select Range"),
-          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
-          
-=======
-      "Admissions",
-      #sidebarLayout(
-      fluidRow(
+     fluidRow(
         column(4,
           wellPanel(
-           p("Select Range"),
-           sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+            p(strong("If you are interested in a particular school, you can use this page to search it and 
+            find out its admission rate and average SAT score in recent years.")),
+            p("Select Range"),
+            sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
            br(),
            p("Select State and/or College"),
            helpText("There are ", strong("two"), "selection method, you can only use one at a time."),
@@ -73,7 +62,6 @@ ui <- fluidPage(
         ), 
         wellPanel(
           h4(strong("Summary:")),
->>>>>>> 791fc6b8098b4f4c0f281d670a60e364cdf429f7
           br(),
           p("After observing recent years admission rate and admitted students average SAT score of multiple colleges.
             We noticed that most of the schools, especially schools with academic prestige, have an downward trend
