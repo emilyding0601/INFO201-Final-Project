@@ -184,12 +184,12 @@ ui <- fluidPage(
       fluidRow(
         column(3,
                wellPanel(
-                 h5(strong("Select the state(s)")),
+                 h4(strong("Select the state(s)")),
                  selectInput('state_map', label = "",
                               choices =  c(state.name), 
                               multiple = TRUE, selected = "Washington", selectize = FALSE),
           br(),
-          h5(strong("How to use?")),
+          h4(strong("How to use?")),
           helpText("The initial visualization contains all the schools at ", strong(" Washington State "),
                    " in ", strong(code("2015")), 
                    ". Please select states. 
@@ -200,7 +200,7 @@ ui <- fluidPage(
         ),
         wellPanel(
           # add the summary
-          h5(strong("Summary")),
+          h4(strong("Summary")),
           helpText("There are ", strong(num_2015), " school in total.", strong(num_no_SAT), 
                    " schools do not require SAT score for general enrollment. 
                    The average age of enrollment entry is ", strong(round(summary$avg.age[1], 0)),
@@ -217,7 +217,7 @@ ui <- fluidPage(
         ),
         wellPanel(
           # add the legend
-          h5(strong("Legend:")),
+          h4(strong("Legend:")),
           helpText(strong(code("UnitID:")), "Unit ID for institution"),
           helpText(strong(code("Avg.SAT:")), "The average score of SAT, values of \"0\" mean 
                    there is no SAT score provided."),
@@ -229,7 +229,7 @@ ui <- fluidPage(
       
         column(9,
           br(),
-          h5("The map visualization contains all the schools in ", strong(code("2015")), "."),
+          h4("The map visualization contains all the schools in ", strong(code("2015")), "."),
           h5("Please wait for plot to load. Use mouse to hover over the ", 
              strong("Markers"), " to see the detail. 
              Select states if you like."),

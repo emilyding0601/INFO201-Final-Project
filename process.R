@@ -3,14 +3,12 @@
 ########################
 
 # install.packages("shinythemes")
-# install.packages("ggmap")
 
 ############
 ## SET UP ##
 ############
 
 library(dplyr)
-library(ggmap)
 
 df_2006_2015 <- read.csv("data/MERGED2006-2015.csv", stringsAsFactors = FALSE)
 
@@ -89,10 +87,14 @@ colnames(df_2015) <- col_2015
 
 sapply(df_2015, class)
 
+# View(df_2015)
 # set numeric type for several columns
 df_2015[, 20:21] <- as.numeric(unlist(df_2015[, 20:21]), na.rm = TRUE)
 
 cities <- as.vector(unique(df_2015$City))
+
+# Filter null values
+df_2015 <- df_2015 %>% filter(Long != "NA", Lat != "NA")
 
 ## for server.R
 # select state data
@@ -125,15 +127,3 @@ max_col <- function(var) {
   col
 }
 
-#### Need these codes for record!
-#### Adding latitude and longitude to `null` values
-# null <- df_2015 %>% filter(Lat == 0, Long == 0)
-# 
-# loc <- geocode(as.character(null$Institution.Name))
-# 
-# df_2015[df_2015$Lat == "0" ,c("Lat")] <- loc$lat
-# df_2015[df_2015$Long == "0" ,c("Long")] <- loc$lon
-# 
-# View(df_2015)
-# 
-# write.csv(df_2015, "data/MERGED2015.csv", row.names = FALSE)
