@@ -22,7 +22,6 @@ ui <- fluidPage(
   # Top navigation bar for Overview, Admission, Cost, Diversity, Conclusion
   navbarPage(
     "College Score Card Data",
-
     # Overview tab in navigation bar
     tabPanel(
       "Overview",
@@ -34,7 +33,18 @@ ui <- fluidPage(
         includeHTML("overview.html")
       )
     ),
-
+    #-------------------------------------------------------------------------
+    tabPanel(
+      "Admission Plot",
+      sidebarLayout(
+        sidebarPanel(
+        p(strong("This is an overview plot of different colleges with recent admission information."))
+        ),
+        mainPanel(
+          plotlyOutput("admission_plot_page")
+        )
+      )
+    ),
     #-------------------------------------------------------------------------
     # Admissions tabe on navigation bar
     tabPanel(
@@ -44,7 +54,7 @@ ui <- fluidPage(
           wellPanel(
             p(strong("If you are interested in a particular school, you can use this page to search it and 
             find out its admission rate and average SAT score in recent years.")),
-            p("Select Range"),
+            p("Select Year Range"),
             sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
            br(),
            p("Select State and/or College"),

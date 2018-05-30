@@ -3,9 +3,8 @@ source("process.R")
 
 # The server is a function that takes `input` and `output` arguments
 server <- function(input, output) {
-
   #---------------------------------------------------------------------------------
-# This is for admission rate Panel
+# This is for school search Panel
   output$college_names <- renderUI({
     statewise_college <- unique(filter(admission, 
                                        State.Postcode == state.abb[match(input$state, state.name)])$Institution.Name)
@@ -171,6 +170,16 @@ server <- function(input, output) {
       )
     plot4 <- ggplotly(plot4)
   })
+  
+  #---------------------------------------------------------------------------------
+  # This is for admission plot Panel
+  output$admission_plot_page <- renderPlotly({
+    plot_ly(admission, x = ~Avg.SAT, y = ~Admission.Rate,
+            text = ~paste("School: ", Institution.Name,'\nYear:', Year, '\nCity:', City, '\nState:', State.Postcode),
+            color = ~Avg.SAT, size = ~Avg.SAT
+            )
+  })
+  
   
   #---------------------------------------------------------------------------------
   # This is for the cost page
