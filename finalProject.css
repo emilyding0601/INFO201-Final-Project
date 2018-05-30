@@ -15,11 +15,11 @@ main {
   margin: 25px;
 }
 p, li {
-  font-size: 16pt;
+  font-size: 12pt;
 }
 
 h1, p , li {
-  font-family: Garamond, serif;
+/*  font-family: monospace; */
 }
 
 #top {
@@ -28,4 +28,5 @@ h1, p , li {
 
 .html {
   text-indent: 25px;
+  font-family: Arial;
 }
