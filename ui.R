@@ -10,6 +10,7 @@ library(shinycssloaders)
 library(DT)
 library(RColorBrewer)
 library(ggmap)
+
 source("process.R")
 
 #-------------------------------------------------------------------------
@@ -37,11 +38,13 @@ ui <- fluidPage(
     #-------------------------------------------------------------------------
     # Admissions tabe on navigation bar
     tabPanel(
-      "Admissions",
+      "School Search",
       # Sidebar for input widgets
       sidebarLayout(
         sidebarPanel(
           #h5(strong("Note")),
+          p("If you are interested in a particular school, you can use this page to search it and 
+            find out its admission rate and average SAT score in recent years."),
           p("Select Range"),
           sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
           
