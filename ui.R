@@ -34,15 +34,24 @@ ui <- fluidPage(
       )
     ),
     #-------------------------------------------------------------------------
+    # This is School Filter Page
     tabPanel(
-      "Admission Plot",
+      "School Filter",
       sidebarLayout(
         sidebarPanel(
-        p(strong("This is an", strong(code("overview")), "plot of different colleges with recent admission information.")),
-        helpText("Please be patient for the graph to load.")
+          p(strong("You can use this page to", strong(code("filter")), "schools that may suit you!")),
+          sliderInput("year_admission_plot", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+          sliderInput("admission_rate_admission_plot", "Admission Rate", 0, 1, value = c(0, 1), sep = ""),
+          sliderInput("SAT_admission_plot", "Average SAT Score", 400, 1600, value = c(400, 1600), step = 50, sep = ""),
+          selectInput('state_admission_plot', label = "School's State (Select or Type)",
+                      choices =  c("", state.name),
+                      multiple = F, selected = F)
         ),
         mainPanel(
-          plotlyOutput("admission_plot_page")
+          p(strong("This is an", strong(code("overview")), "plot of different colleges with recent admission information.")),
+          helpText("Please be patient for the graph to load."),
+          plotlyOutput("school_filter"),
+          p("After finding suitable schools, you can see the details of that school in the", strong(code("School Search")), "page.")
         )
       )
     ),

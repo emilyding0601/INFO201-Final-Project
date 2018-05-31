@@ -173,14 +173,30 @@ server <- function(input, output) {
   })
   
   #---------------------------------------------------------------------------------
-  # This is for admission plot Panel
-  output$admission_plot_page <- renderPlotly({
-    plot_ly(admission, x = ~Avg.SAT, y = ~Admission.Rate,
-            text = ~paste("School: ", Institution.Name,'\nYear:', Year, '\nCity:', City, '\nState:', State.Postcode),
-            color = ~Avg.SAT, size = ~Avg.SAT
-            )
+  # This is for school filter plot Panel
+  school_filtered <- reactive({
+    if(input$state_admission_plot == '') {
+      all_data_needed <- admission %>%
+        filter(Year >= input$year_admission_plot[[1]], Year <= input$year_admission_plot[[2]]) %>%
+        filter(Avg.SAT >= input$SAT_admission_plot[[1]], Avg.SAT <= input$SAT_admission_plot[[2]]) %>%
+        filter(Admission.Rate >= input$admission_rate_admission_plot[[1]], Admission.Rate <= input$admission_rate_admission_plot[[2]])
+      return(all_data_needed)
+    } else {
+      all_data_needed <- admission %>%
+        filter(Year >= input$year_admission_plot[[1]], Year <= input$year_admission_plot[[2]]) %>%
+        filter(Avg.SAT >= input$SAT_admission_plot[[1]], Avg.SAT <= input$SAT_admission_plot[[2]]) %>%
+        filter(State.Postcode == state.abb[match(input$state_admission_plot,state.name)]) %>%
+        filter(Admission.Rate >= input$admission_rate_admission_plot[[1]], Admission.Rate <= input$admission_rate_admission_plot[[2]]) 
+      return(all_data_needed)
+    }
   })
   
+  output$school_filter <- renderPlotly({
+    plot_ly(school_filtered(), x = ~Avg.SAT, y = ~Admission.Rate,
+            text = ~paste("School: ", Institution.Name,'\nYear:', Year, '\nCity:', City, '\nState:', State.Postcode),
+            color = ~Avg.SAT, size = ~Avg.SAT
+    )
+  })
   
   #---------------------------------------------------------------------------------
   # This is for the cost page
