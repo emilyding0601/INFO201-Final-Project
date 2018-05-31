@@ -95,6 +95,7 @@ server <- function(input, output) {
        )
      plot2 <- ggplotly(plot2)
    })
+   
 #---------------------------------------------------------------------------------
 # This is for SAT Panel
   filtered_for_college_name_SAT <- reactive({
@@ -270,6 +271,40 @@ server <- function(input, output) {
       
       DT::datatable(map_table(), escape = FALSE)
 
+  })
+  
+  #-----------------------------------------------------------------------------------
+  # Diversity data
+  output$state_output <- renderUI({
+    # citywise <- unique(filter(diversity_data, 
+    #                            State.Postcode == state.abb[match(input$state, state.name)]),
+    #                    )
+    # citywise <- citywise[order(citywise)]
+    selectInput('city', label = "City Option (Select or Type)", 
+                choices =  as.character(diversity_data[state.name == input$state, "City"]), 
+                multiple = F, selected = F)
+  })
+  
+  filtered_city <- reactive({
+    diversity_table <- diversity_data %>%
+      select(Institution.Name, City, State.Postcode, Year, 
+             `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>%
+      filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
+      filter(State.Postcode == state.abb[match(input$state,state.name)]) %>%
+      filter(City == input$city)
+    return(diversity_table)
+  })
+  
+  output$menwomen <- renderPlotly({
+    plot5 <- ggplot(data = filtered_city(), na.rm = TRUE, mapping = aes(x = Institution.Name, y = Total.Enrolled.Men)) +
+      geom_point(aes()) +
+      geom_line(aes()) +
+      labs(
+        title = "Admission Rate vs. Year",
+        x = "Year",
+        y = "Admission Rate"
+      )
+    plot5 <- ggplotly(plot5)
   })
 }
 
