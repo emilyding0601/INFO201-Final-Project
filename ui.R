@@ -172,6 +172,8 @@ ui <- fluidPage(
             ),
             tabPanel(
               "Tuition vs Faculty Salary",
+              br(),
+              br(),
               plotlyOutput("tuiton_salary") 
             )
           )

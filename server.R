@@ -196,7 +196,7 @@ server <- function(input, output) {
     plot_ly(school_filtered(), x = ~Avg.SAT, y = ~Admission.Rate,
             text = ~paste("School: ", Institution.Name,'\nYear:', Year, '\nCity:', City, '\nState:', State.Postcode),
             color = ~Avg.SAT, size = ~Avg.SAT
-    )
+    ) %>% layout(title = "Total Average SAT vs.Admission Rate")
   })
   
   #---------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ server <- function(input, output) {
     plot_ly(cost_page_tution_select, x = ~Tuition, y = ~Avg.Faculty.Salary,
             text = ~paste("School: ", Institution.Name,'\nTuition:', Tuition, '\nCity:', City, '\nState:', State),
             color = ~Tuition, size = ~Avg.Faculty.Salary
-    )
+    ) %>% layout(title = "Total Tuition vs. Faculty Salary")
   })
   
  
