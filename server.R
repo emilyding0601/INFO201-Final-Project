@@ -281,22 +281,55 @@ server <- function(input, output) {
     #                    )
     # citywise <- citywise[order(citywise)]
     selectInput('city', label = "City Option (Select or Type)", 
-                choices =  as.character(diversity_data[state.name == input$state, "City"]), 
+                choices =  c(diversity_data$City), 
                 multiple = F, selected = F)
   })
   
   filtered_city <- reactive({
     diversity_table <- diversity_data %>%
-      select(Institution.Name, City, State.Postcode, Year, 
+      select(Institution.Name, City, state, Year, 
              `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>%
       filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
-      filter(State.Postcode == state.abb[match(input$state,state.name)]) %>%
+      filter(state == input$state) %>%
       filter(City == input$city)
     return(diversity_table)
   })
   
-  output$menwomen <- renderPlotly({
-    plot5 <- ggplot(data = filtered_city(), na.rm = TRUE, mapping = aes(x = Institution.Name, y = Total.Enrolled.Men)) +
+  filtered_state <- reactive({
+    state_table <- diversity_data %>%
+      select(Institution.Name, City, state, Year, 
+             `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>%
+      filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
+      filter(state == input$state)
+    return(state_table)
+  })
+  
+  # output$menwomen <- renderPlotly({
+  #   plot5 <- ggplot(data = filtered_city(), na.rm = TRUE, mapping = aes(x = Institution.Name, y = Total.Enrolled.Men)) +
+  #     geom_point(aes()) +
+  #     geom_line(aes()) +
+  #     labs(
+  #       title = "Admission Rate vs. Year",
+  #       x = "Year",
+  #       y = "Admission Rate"
+  #     )
+  #   plot5 <- ggplotly(plot5)
+  # })
+  
+  output$diversity_ui <- renderUI({
+    if(input$state  == '' & input$city == ''){
+      return(h4(strong("Please choose a school first.")))
+    } else if(input$state != '' & input$city == '') {
+      plotlyOutput("diversity_state_plot")
+    } else if(input$state == '' & input$city != '') {
+      plotlyOutput("diversity_city_plot")
+    } else {
+      return(h4(strong("Selection conflict: You can only use one selection method.")))
+    }
+  })
+  
+  output$diversity_state_plot <- renderPlotly({
+    plot5 <- ggplot(data = filtered_state(), mapping = aes(x = Institution.Name, y = Total.Enrolled.Men)) +
       geom_point(aes()) +
       geom_line(aes()) +
       labs(
@@ -306,6 +339,19 @@ server <- function(input, output) {
       )
     plot5 <- ggplotly(plot5)
   })
+  
+  output$diversity_city_plot <- renderPlotly({
+    plot6 <- ggplot(data = filtered_city(), mapping = aes(x = Institution.Name, y = Total.Enrolled.Men)) +
+      geom_point(aes()) +
+      geom_line(aes()) +
+      labs(
+        title = "Admission Rate vs. Year",
+        x = "Year",
+        y = "Admission Rate"
+      )
+    plot6 <- ggplotly(plot6)
+  })
+  
 }
 
 shinyServer(server)

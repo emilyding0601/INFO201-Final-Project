@@ -170,14 +170,19 @@ ui <- fluidPage(
           helpText("1) You can", strong(code("select or type")), "a state first and then",
                    strong(code("select or type")), "a college in that state."),
           selectInput('state', label = "State Option (Select or Type)",
-                      choices =  c("", state.name),
-                      multiple = F, selected = F),
-          uiOutput("state_output")
+                      choices =  c(diversity_data$state),
+                      multiple = F, selected = F)
+          #uiOutput("state_output")
+          # selectInput('city', label = "City Option (Select or Type)", 
+          #             choices =  c(diversity_data$City), 
+          #             multiple = F, selected = F)
           ), 
         mainPanel(
           tabsetPanel(
             tabPanel(
-              "Percent Men/Women", plotOutput("menwomen") # 5th plot
+              "Percent Men/Women", 
+              uiOutput("diversity_ui")
+              #plotOutput("menwomen") # 5th plot
             ),
             tabPanel(
               "Diversity", dataTableOutput("diversity") # 6th plot

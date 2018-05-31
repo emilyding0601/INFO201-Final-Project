@@ -130,5 +130,7 @@ max_col <- function(var) {
 # Select the data for diversity
 diversity_data <- df_2006_2015 %>% 
   select(Year, Institution.Name, City, State.Postcode, Enrollment, 
-         `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women)
+         `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>% 
+  mutate(state = state.name[match(State.Postcode, state.abb)]) %>% 
+  select(-State.Postcode)
 
