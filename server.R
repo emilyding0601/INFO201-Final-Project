@@ -297,7 +297,7 @@ server <- function(input, output) {
   filtered_state <- reactive({
     state_table <- diversity_data %>%
       select(Institution.Name, City, state, Year, 
-             `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>%
+             `Percent.1st-generation`, total_men, total_women) %>%
       filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
       filter(state == input$state_diver)
     return(state_table)
@@ -329,16 +329,18 @@ server <- function(input, output) {
   })
   
   output$diversity_state_plot <- renderPlotly({
-    plot5 <- ggplot(data = filtered_state(), mapping = aes(x = Institution.Name, y = Total.Enrolled.Men)) +
+    plot5 <- ggplot(data = filtered_state(), mapping = aes(x = Institution.Name, y = total_men)) +
       geom_point(aes()) +
       labs(
         title = "School vs. Percent Men Enrolled",
         x = "School",
-        y = "Enrolled Men %") +
+        y = "Enrolled Men") +
       theme(axis.text.x = element_text(angle = 90, 
                                        vjust = 0.5, 
-                                       hjust = 1)
-      )
+                                       hjust = 1),
+            plot.title = element_text(color = "red"),
+            axis.title.x = element_text(color = "dark green"),
+            axis.title.y = element_text(color = "dark green"))
     plot5 <- ggplotly(plot5)
   })
   
@@ -354,11 +356,11 @@ server <- function(input, output) {
   #   plot6 <- ggplotly(plot6)
   # })
   
-  output$diversity <- renderDataTable({
+  output$diversity_table <- renderDataTable({
     table_output <- diversity_data %>%
       filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
       filter(state == input$state_diver) %>% 
-      select(Year, Institution.Name, state, City, Total.Enrolled.Men, Total.Enrolled.Women)
+      select(Year, Institution.Name, state, City, total_men, total_women)
     table_output
     # if(input$state_diver == '' & input$city == '') {
     #   table_output <- diversity_data %>%
