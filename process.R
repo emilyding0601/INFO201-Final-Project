@@ -106,6 +106,9 @@ getState <- function(states) {
   selected
 }
 
+# WA's data
+wa_data <- df_2015 %>% filter(State.Postcode == "WA")
+
 # Prepare the text for the initial map:
 text <- paste("<h4/>", df_2015$Institution.Name, "<br/>", "<br/>",
               "Enrollment Number: ", df_2015$Enrollment, "<br/>", 
