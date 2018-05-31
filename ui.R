@@ -143,7 +143,7 @@ ui <- fluidPage(
                    "(such as International Students), leave it", strong("blank")),
           
           selectInput('state_for_cost', label = "Your state residence (Select or Type)", 
-                      choices =  c("", state.name), 
+                      choices =  c("Alabama", state.name),
                       multiple = F, selected = F),
           br(),
           helpText("Choose a ", strong("tuition"), " range"),
@@ -168,6 +168,7 @@ ui <- fluidPage(
           tabsetPanel(
             tabPanel(
               "Tuition Table",
+              br(),
               dataTableOutput("filter_cost_table")
             ),
             tabPanel(
