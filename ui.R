@@ -177,13 +177,15 @@ ui <- fluidPage(
         ), 
         mainPanel(
           tabsetPanel(
+            
             tabPanel(
               "Percent Men/Women", 
               uiOutput("diversity_ui"),
               dataTableOutput("diversity_table")
             ),
+            
             tabPanel(
-              "1st Generation", dataTableOutput("first") # 6th plot
+              "1st Generation", dataTableOutput("first")
             )
           )
         )
