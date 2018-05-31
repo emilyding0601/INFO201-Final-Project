@@ -212,13 +212,20 @@ ui <- fluidPage(
             
             tabPanel(
               "Total Men/Women", 
+              br(),
+              br(),
+              
               uiOutput("diversity_men"),
-              uiOutput("diversity_women"),
+              br(),
+              hr(),
+              
               dataTableOutput("diversity_table")
             ),
             
             tabPanel(
               "1st Generation", 
+              br(),
+              br(),
               uiOutput("generation_ui"),
               dataTableOutput("first_table")
             )
