@@ -137,14 +137,14 @@ ui <- fluidPage(
       fluidRow(
         column(4,
           wellPanel(
-          h5(strong("Note")),
-          helpText("Enter your", strong("state residence"), "."),
+          
+          p("Enter your", strong("State of residence")),
           helpText("If you", strong("don't belong to any state,"), 
                    "(such as International Students), leave it", strong("blank")),
           
           selectInput('state_for_cost', label = "Your state residence (Select or Type)", 
                       choices =  c("", state.name), 
-                      multiple = F, selected = F),
+                      multiple = F, selected = "Alabama"),
           br(),
           helpText("Choose a ", strong("tuition"), " range"),
 
