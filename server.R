@@ -149,7 +149,7 @@ server <- function(input, output) {
   })
   
   output$SAT_plot <- renderPlotly({
-    plot3 <- ggplot(data = filtered_2(), mapping = aes(x = Year, y = Avg.SAT), color = Avg.SAT) +
+    plot3 <- ggplot(data = filtered_2(), mapping = aes(x = Year, y = Avg.SAT, color = Avg.SAT)) +
       geom_point(aes()) +
       geom_line(aes()) +
       labs(
@@ -161,7 +161,8 @@ server <- function(input, output) {
   })
 
   output$SAT_plot_2 <- renderPlotly({
-    plot4 <- ggplot(data = filtered_for_college_name_SAT(), mapping = aes(x = Year, y = Avg.SAT), color = Avg.SAT) +
+    plot4 <- ggplot(data = filtered_for_college_name_SAT(), 
+                    mapping = aes(x = Year, y = Avg.SAT, color = Avg.SAT)) +
       geom_point(aes()) +
       geom_line(aes()) +
       labs(
