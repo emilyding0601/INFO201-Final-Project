@@ -145,6 +145,7 @@ ui <- fluidPage(
           selectInput('state_for_cost', label = "Your state residence (Select or Type)", 
                       choices =  c("", state.name), 
                       multiple = F, selected = "Alabama"),
+
           br(),
           helpText("Choose a ", strong("tuition"), " range"),
 
@@ -168,10 +169,13 @@ ui <- fluidPage(
           tabsetPanel(
             tabPanel(
               "Tuition Table",
+              br(),
               dataTableOutput("filter_cost_table")
             ),
             tabPanel(
               "Tuition vs Faculty Salary",
+              br(),
+              br(),
               plotlyOutput("tuiton_salary") 
             )
           )
