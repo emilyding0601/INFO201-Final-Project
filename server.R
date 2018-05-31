@@ -320,17 +320,36 @@ server <- function(input, output) {
   filtered_state <- reactive({
     diversity_data %>%
       select(Institution.Name, City, State, Year, Total.Men, Total.Women) %>%
-      filter(Year == input$year_diver) %>%
+      filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
       filter(State == input$state_diver)
   })
   
-  output$diversity_ui <- renderUI({
-    plotlyOutput("diversity_state_plot")
+  output$diversity_men <- renderUI({
+    plotlyOutput("diversity_men_plot")
   })
   
-  output$diversity_state_plot <- renderPlotly({
-    plot_ly(filtered_state(), x = ~Institution.Name, y = ~Total.Men, type = 'bar', name = 'Total Men') %>%
-      add_trace(y = ~Total.Women, name = 'Total Women') %>%
+  output$diversity_women <- renderUI({
+    plotlyOutput("diversity_women_plot")
+  })
+  
+  output$diversity_men_plot <- renderPlotly({
+    # plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
+    #   add_trace(y = ~total_women, name = 'Total Women') %>%
+    #   layout(yaxis = list(title = 'Count'), barmode = 'group')
+    
+    plot_ly(filtered_state(), x = ~Year, y = ~Total.Men, color = ~Institution.Name,
+            text = ~paste("School: ", Institution.Name,'\nYear:', Year,
+                          '\nCity:', City, '\nState:', State, '\nGender: Men'))
+  })
+  
+  output$diversity_women_plot <- renderPlotly({
+    # plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
+    #   add_trace(y = ~total_women, name = 'Total Women') %>%
+    #   layout(yaxis = list(title = 'Count'), barmode = 'group')
+    
+    plot_ly(filtered_state(), x = ~Year, y = ~Total.Women, color = ~Institution.Name,
+            text = ~paste("School: ", Institution.Name,'\nYear:', Year,
+                          '\nCity:', City, '\nState:', State, '\nGender: Women')) %>%
       layout(yaxis = list(title = 'Count'), barmode = 'group')
   })
   
@@ -349,7 +368,7 @@ server <- function(input, output) {
   filtered_state_gen <- reactive({
     diversity_data %>%
       select(Institution.Name, City, State, Year, Total.First.Gen) %>%
-      filter(Year == input$year_diver) %>%
+      filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
       filter(State == input$state_diver)
   })
   
@@ -358,14 +377,17 @@ server <- function(input, output) {
   })
   
   output$first_gen_plot <- renderPlotly({
-    plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~Total.First.Gen, type = 'bar', name = 'Total Men') %>% 
-      layout(yaxis = list(title = 'Count'))
+    # plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~Total.First.Gen, type = 'bar', name = 'Total First Gen.') %>% 
+    #   layout(yaxis = list(title = 'Count'))
+    plot_ly(filtered_state_gen(), x = ~Year, y = ~Total.First.Gen, color = ~Institution.Name,
+            text = ~paste("School: ", Institution.Name,'\nYear:', Year,
+                          '\nCity:', City, '\nState:', State))
   })
   
   output$first_table <- renderDataTable({
     if(input$state_diver == '') {
       table_output <- diversity_data %>%
-        filter(Year == input$year_diver) %>%
+        filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
         select(Year, Institution.Name, State, City, Total.First.Gen)
       table_output
     } else if(input$state_diver != '') {
