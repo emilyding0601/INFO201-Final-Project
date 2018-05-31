@@ -131,9 +131,9 @@ max_col <- function(var) {
 diversity_data <- df_2006_2015 %>% 
   select(Year, Institution.Name, City, State.Postcode, Enrollment, 
          `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>% 
-  mutate(state = state.name[match(State.Postcode, state.abb)],
-         total_men = Enrollment * Total.Enrolled.Men,
-         total_women = Enrollment * Total.Enrolled.Women,
-         total_first_gen = Enrollment * `Percent.1st-generation`) %>% 
+  mutate(State = state.name[match(State.Postcode, state.abb)],
+         Total.Men = round(Enrollment * Total.Enrolled.Men, 0),
+         Total.Women = round(Enrollment * Total.Enrolled.Women, 0),
+         Total.First.Gen = round(Enrollment * `Percent.1st-generation`, 0)) %>% 
   select(-State.Postcode, -`Percent.1st-generation`, -Total.Enrolled.Men, -Total.Enrolled.Women)
 

@@ -83,12 +83,12 @@ ui <- fluidPage(
         wellPanel(
           h4(strong("Summary:")),
           br(),
-          p("After observing recent years admission rate and admitted students average SAT score of multiple colleges.
+          helpText("After observing recent years admission rate and admitted students average SAT score of multiple colleges.
             We noticed that most of the schools, especially schools with academic prestige, have an downward trend
             of admission rate and an upward trend of admitted students average SAT score. That is, most colleges
             are harder and harder to get into."),
           br(),
-          p("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
+          helpText("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
             a certain range, about ten percent for the admission rate and fifty points for the SAT score.")
         )
       ),
@@ -124,8 +124,9 @@ ui <- fluidPage(
 
     tabPanel(
       "Cost",
-      sidebarLayout(
-        sidebarPanel(
+      fluidRow(
+        column(4,
+          wellPanel(
           h5(strong("Note")),
           helpText("Enter your", strong("state residence"), "."),
           helpText("If you", strong("don't belong to any state,"), 
@@ -139,10 +140,19 @@ ui <- fluidPage(
 
           sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
                       step = 500, pre = "$", sep = ""),
-          #helpText("Choose a ", strong("school type")),
-          #checkboxGroupInput("school_type", "School Type:", c("private", "public"), selected = c("private", "public")),
+          
           br()
         ),
+        
+        wellPanel(
+          h4(strong("Summary:")),
+          br(),
+          p("After observing recent years tuitions and average salary of fautly of multiple colleges,", 
+           code("need to add the summary")),
+          br(),
+          p(code("need to add the summary"))
+          )
+      ),
         mainPanel(
           tabsetPanel(
             tabPanel(
@@ -163,8 +173,9 @@ ui <- fluidPage(
     # Diversity (First-Gen Student) tabe on navigation bar
     tabPanel(
       "Diversity",
-      sidebarLayout(
-        sidebarPanel(
+      fluidRow(
+        column(4,
+          wellPanel(
           p(strong("See the percet of gender distribution.")),
           p("Select Year Range"),
           sliderInput("year_diver", "Year", 2006, 2015, value = 2015, sep = ""),
@@ -173,18 +184,18 @@ ui <- fluidPage(
           helpText("You can", strong(code("select or type")), "a state."),
           
           selectInput('state_diver', label = "State Option (Select or Type)",
-                      choices =  c(diversity_data$state),
+                      choices =  c(diversity_data$State),
                       multiple = F, selected = F)
         ), 
-        # wellPanel(
-        #   h4(strong("Summary")),
-        #   helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
-        #            The graph and table show the number of each gender from each each school. After observing the data,
-        #            it is shown  that the difference between two genders and the amount of each gender have only slight
-        #            changes. In the graph and table of first generation, we can see the amount of people who are first
-        #            generation in each year and each school. These also show the changes are mild")
-        # ),
-        
+        wellPanel(
+          h4(strong("Summary")),
+          helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
+                   The graph and table show the number of each gender from each each school. After observing the data,
+                   it is shown  that the difference between two genders and the amount of each gender have only slight
+                   changes. In the graph and table of first generation, we can see the amount of people who are first
+                   generation in each year and each school. These also show the changes are mild")
+        )
+      ),
         mainPanel(
           tabsetPanel(
             
