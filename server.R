@@ -4,7 +4,7 @@ source("process.R")
 # The server is a function that takes `input` and `output` arguments
 server <- function(input, output) {
   #---------------------------------------------------------------------------------
-# This is for school search Panel
+  # This is for school search Panel
   output$college_names <- renderUI({
     statewise_college <- unique(filter(admission, 
                                        State.Postcode == state.abb[match(input$state, state.name)])$Institution.Name)
@@ -52,11 +52,11 @@ server <- function(input, output) {
         filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
         filter(State.Postcode == state.abb[match(input$state,state.name)])
       admission_table_select
-      } else if(input$state != '' & input$school != '' & input$school_2 == '') {
-        filtered()
-      } else if(input$state == '' & input$school == '' & input$school_2 != '') {
-        filtered_for_college_name_2()
-      }
+    } else if(input$state != '' & input$school != '' & input$school_2 == '') {
+      filtered()
+    } else if(input$state == '' & input$school == '' & input$school_2 != '') {
+      filtered_for_college_name_2()
+    }
   })
   
   output$admission_rate_ui <- renderUI({
@@ -70,42 +70,42 @@ server <- function(input, output) {
       return(h4(strong("Selection conflict: You can only use one selection method.")))
     }
   })
-
+  
   # Admission Rate Plot
-   output$admission_rate_plot <- renderPlotly({
-     plot1 <- ggplot(data = filtered(), mapping = aes(x = Year, y = Admission.Rate)) +
-       geom_point(aes()) +
-       geom_line(aes()) +
-       labs(
-         title = "Admission Rate vs. Year",
-         x = "Year",
-         y = "Admission Rate"
-       )
-     plot1 <- ggplotly(plot1)
-   })
-   
-   output$admission_rate_plot_2 <- renderPlotly({
-     plot2 <- ggplot(data = filtered_for_college_name_2(), mapping = aes(x = Year, y = Admission.Rate)) +
-       geom_point(aes()) +
-       geom_line(aes()) +
-       labs(
-         title = "Admission Rate vs. Year",
-         x = "Year",
-         y = "Admission Rate"
-       )
-     plot2 <- ggplotly(plot2)
-   })
-   
-#---------------------------------------------------------------------------------
-# This is for SAT Panel
+  output$admission_rate_plot <- renderPlotly({
+    plot1 <- ggplot(data = filtered(), mapping = aes(x = Year, y = Admission.Rate)) +
+      geom_point(aes()) +
+      geom_line(aes()) +
+      labs(
+        title = "Admission Rate vs. Year",
+        x = "Year",
+        y = "Admission Rate"
+      )
+    plot1 <- ggplotly(plot1)
+  })
+  
+  output$admission_rate_plot_2 <- renderPlotly({
+    plot2 <- ggplot(data = filtered_for_college_name_2(), mapping = aes(x = Year, y = Admission.Rate)) +
+      geom_point(aes()) +
+      geom_line(aes()) +
+      labs(
+        title = "Admission Rate vs. Year",
+        x = "Year",
+        y = "Admission Rate"
+      )
+    plot2 <- ggplotly(plot2)
+  })
+  
+  #---------------------------------------------------------------------------------
+  # This is for SAT Panel
   filtered_for_college_name_SAT <- reactive({
-     SAT_table_select_2 <- admission %>%
-       select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
-       filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
-       filter(Institution.Name == input$school_2)
-     return(SAT_table_select_2)
-   })
-
+    SAT_table_select_2 <- admission %>%
+      select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
+      filter(Year >= input$year[[1]], Year <= input$year[[2]]) %>%
+      filter(Institution.Name == input$school_2)
+    return(SAT_table_select_2)
+  })
+  
   filtered_2 <- reactive({
     SAT_table_select <- admission %>%
       select(Institution.Name, State.Postcode, Year, Avg.SAT) %>%
@@ -159,7 +159,7 @@ server <- function(input, output) {
       )
     plot3 <- ggplotly(plot3)
   })
-
+  
   output$SAT_plot_2 <- renderPlotly({
     plot4 <- ggplot(data = filtered_for_college_name_SAT(), 
                     mapping = aes(x = Year, y = Avg.SAT, color = Avg.SAT)) +
@@ -201,59 +201,60 @@ server <- function(input, output) {
   
   #---------------------------------------------------------------------------------
   # This is for the cost page
-
+  
   output$filter_cost_table <- renderDataTable({
     for (i in 1:nrow(cost_page_tution)) {
       # International student or Private Schools
-      if (input$state_for_cost == "" | cost_page_tution$school_type[i] == "private") {
-        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
+      if (input$state_for_cost == '' | cost_page_tution$Type[i] == "Private") {
+        cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
       } 
       # US citizen
       else {
-        if(cost_page_tution$school_type[i] == "public" & 
+        if(cost_page_tution$Type[i] == "Public" & 
            cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
         {
-          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
+          cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
         }
         else
         {
-          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State[i]
+          cost_page_tution$Tuition[i] <- cost_page_tution$In.State[i]
         }
       }
     }
     cost_page_tution_select <- cost_page_tution %>%
-      filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
+      filter(State == state.abb[match(input$state_for_cost,state.name)]) %>%
+      filter(Tuition > input$tuition_slider[[1]], Tuition < input$tuition_slider[[2]]) 
     return(cost_page_tution_select)
   })
-
+  
   output$tuiton_salary <- renderPlotly({
     for (i in 1:nrow(cost_page_tution)) {
       # International student or Private Schools
-      if (input$state_for_cost == '' | cost_page_tution$school_type[i] == "private") {
-        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
+      if (input$state_for_cost == '' | cost_page_tution$Type[i] == "Private") {
+        cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
       } 
       # US citizen
       else {
-        if(cost_page_tution$school_type[i] == "public" & 
+        if(cost_page_tution$Type[i] == "Public" & 
            cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
         {
-          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
+          cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
         }
         else
         {
-          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State[i]
+          cost_page_tution$Tuition[i] <- cost_page_tution$In.State[i]
         }
       }
     }
     cost_page_tution_select <- cost_page_tution %>%
-      filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
-    plot_ly(cost_page_tution_select, x = ~your_tuition, y = ~Avg.Faculty.Salary,
-            text = ~paste("School: ", Institution.Name,'\nyour_tuition:', your_tuition, '\nCity:', City, '\nState:', State),
-            color = ~your_tuition, size = ~Avg.Faculty.Salary
-    )
+      filter(Tuition > input$tuition_slider[[1]], Tuition < input$tuition_slider[[2]])
+    plot_ly(cost_page_tution_select, x = ~Tuition, y = ~Avg.Faculty.Salary,
+            text = ~paste("School: ", Institution.Name,'\nTuition:', Tuition, '\nCity:', City, '\nState:', State),
+            color = ~Tuition, size = ~Avg.Faculty.Salary
+    ) %>% layout(title = "Total Tuition vs. Faculty Salary")
   })
   
- 
+  
   
   #---------------------------------------------------------------------------------
   # generate the maps
@@ -272,8 +273,8 @@ server <- function(input, output) {
     leafletProxy('map') %>% clearMarkers() %>% 
       setView(lng = filtered_state$Long[1], lat = filtered_state$Lat[1], zoom = 7) %>% 
       addMarkers(lng = filtered_state$Long,
-                       lat = filtered_state$Lat,
-                       label = text,
+                 lat = filtered_state$Lat,
+                 label = text,
                  labelOptions = labelOptions(style = list("font-weight" = "normal",
                                                           padding = "5px 10px"), 
                                              textsize = "16px", direction = "auto"))
@@ -287,32 +288,32 @@ server <- function(input, output) {
       addTiles() %>% 
       setView(lng = -122.3321, lat = 47.6062, zoom = 7) %>% 
       addMarkers(lng = df_2015$Long,
-                       lat = df_2015$Lat,
-                       label = text,
+                 lat = df_2015$Lat,
+                 label = text,
                  labelOptions = labelOptions(style = list("font-weight" = "normal",
                                                           padding = "5px 10px"), 
                                              textsize = "16px", direction = "auto"))
-
+    
   })
   
   ## add the summary table with hyperlink
   # reactive the value for output
   map_table <- reactive({
-
-      filtered <- getState(input$state_map) %>%
-        select(UnitID, Institution.Name, Institution.URL, Avg.SAT, Admission.Rate, Open.Admissions.Policy)
-
-      filtered$Institution.URL <- paste0("<a href='",filtered$Institution.URL,"'>", 
-                                         filtered$Institution.URL,"</a>")
-
+    
+    filtered <- getState(input$state_map) %>%
+      select(UnitID, Institution.Name, Institution.URL, Avg.SAT, Admission.Rate, Open.Admissions.Policy)
+    
+    filtered$Institution.URL <- paste0("<a href='",filtered$Institution.URL,"'>", 
+                                       filtered$Institution.URL,"</a>")
+    
     return(filtered)
   })
-
+  
   # output the table
   output$maptable <- DT::renderDataTable({
-      
-      DT::datatable(map_table(), escape = FALSE)
-
+    
+    DT::datatable(map_table(), escape = FALSE)
+    
   })
   
   #-----------------------------------------------------------------------------------
@@ -368,7 +369,7 @@ server <- function(input, output) {
       layout(yaxis = list(title = 'Total First Generation Count'), 
              title = "Total First Generation in Colleges each Year", 
              barmode = 'group')
-
+    
   })
   
   output$first_table <- renderDataTable({

@@ -53,19 +53,19 @@ summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") 
 # This is for the Cost page
 cost_page <- df_2006_2015 %>% select(1, (4:6), (12:16))
 cost_page_tution <- cost_page %>% filter(Year == "2015") %>% select((2:6), 9)
-colnames(cost_page_tution) <- c("Institution.Name", "City", "State", "In_State", "Out_State", "Avg.Faculty.Salary")
-cost_page_tution$In_State <- as.numeric(as.character(cost_page_tution$In_State))
-cost_page_tution$Out_State <- as.numeric(as.character(cost_page_tution$Out_State))
+colnames(cost_page_tution) <- c("Institution.Name", "City", "State", "In.State", "Out.State", "Avg.Faculty.Salary")
+cost_page_tution$In.State <- as.numeric(as.character(cost_page_tution$In.State))
+cost_page_tution$Out.State <- as.numeric(as.character(cost_page_tution$Out.State))
 
 for (i in 1:nrow(cost_page_tution)) {
-  if (cost_page_tution$In_State[i] == cost_page_tution$Out_State[i]) {
-    cost_page_tution$school_type[i] <- "private"
+  if (cost_page_tution$In.State[i] == cost_page_tution$Out.State[i]) {
+    cost_page_tution$Type[i] <- "Private"
   } else {
-    cost_page_tution$school_type[i] <- "public"
+    cost_page_tution$Type[i] <- "Public"
   }
 }
 
-max_cost <- cost_page_tution %>% arrange(-In_State) %>% head(1)
+max_cost <- cost_page_tution %>% arrange(-In.State) %>% head(1)
 max_salary <- cost_page_tution %>% arrange(-Avg.Faculty.Salary) %>% head(1)
 
 #----------------------------------------------------
