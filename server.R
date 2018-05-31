@@ -221,10 +221,11 @@ server <- function(input, output) {
       }
     }
    cost_page_tution_select <- cost_page_tution %>%
-     filter(Tuition > input$tuition_slider[[1]], Tuition < input$tuition_slider[[2]])
+     filter(State == state.abb[match(input$state_for_cost,state.name)]) %>%
+     filter(Tuition > input$tuition_slider[[1]], Tuition < input$tuition_slider[[2]]) 
    return(cost_page_tution_select)
  })
-   
+
   output$tuiton_salary <- renderPlotly({
     for (i in 1:nrow(cost_page_tution)) {
       # International student or Private Schools
