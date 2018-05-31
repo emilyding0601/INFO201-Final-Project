@@ -274,7 +274,12 @@ ui <- fluidPage(
     # Conclusion of analysis and html tags as needed
     tabPanel(
       "Conclusion",
-      fluidRow()
+      fluidRow(
+        column(width = 6, img(src = "students.png")),
+        column(width = 6, img(src = "students.png")),
+        br(),
+        includeHTML("conclusion.html")
+      )
     ),
     br(),
     hr(),
