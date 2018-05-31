@@ -137,7 +137,6 @@ ui <- fluidPage(
       fluidRow(
         column(4,
           wellPanel(
-<<<<<<< HEAD
             h5(strong("Note")),
             helpText("Enter your", strong("state residence"), "."),
             helpText("If you", strong("don't belong to any state,"), 
@@ -151,21 +150,6 @@ ui <- fluidPage(
             
             sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
                         step = 500, pre = "$", sep = "")
-=======
-          p(strong("If you are interested in the cost of schools, 
-            select your state and pick the budget for tuition.")),
-          helpText("Enter your", strong("state"), "."),
-          selectInput('state_for_cost', label = "Your state (Select or Type)", 
-                      choices =  c("Alabama", state.name),
-                      multiple = F, selected = F),
-          br(),
-          helpText("Choose a ", strong("tuition"), " range"),
-
-          sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
-                      step = 500, pre = "$", sep = ""),
-          
-          br()
->>>>>>> 9bf3802b62e2a316f072b85d574db7ab91c66705
         ),
         
         wellPanel(
