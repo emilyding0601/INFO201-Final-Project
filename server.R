@@ -303,7 +303,6 @@ server <- function(input, output) {
   })
   
   output$diversity_ui <- renderUI({
-    #plotlyOutput("diversity_state_plot")
     if(input$state_diver  == '' & input$city == ''){
       return(h4(strong("Please choose a State first.")))
     } else if(input$state_diver != '' & input$city == '') {
@@ -355,11 +354,9 @@ server <- function(input, output) {
         select(Year, Institution.Name, state, City, total_men, total_women)
       table_output
     } else if(input$state_diver != '' & input$city == '') {
-      table_output <- diversity_data %>%
-        select(Year, Institution.Name, state, City, total_men, total_women) %>%
-        filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
-        filter(state == input$state_diver)
-      table_output
+      filtered_state()
+    } else {
+      filtered_city()
     }
   })
 }
