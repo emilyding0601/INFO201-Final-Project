@@ -38,7 +38,8 @@ ui <- fluidPage(
       "Admission Plot",
       sidebarLayout(
         sidebarPanel(
-        p(strong("This is an overview plot of different colleges with recent admission information."))
+        p(strong("This is an", strong(code("overview")), "plot of different colleges with recent admission information.")),
+        helpText("Please be patient for the graph to load.")
         ),
         mainPanel(
           plotlyOutput("admission_plot_page")
