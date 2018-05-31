@@ -173,14 +173,30 @@ server <- function(input, output) {
   })
   
   #---------------------------------------------------------------------------------
-  # This is for admission plot Panel
-  output$admission_plot_page <- renderPlotly({
-    plot_ly(admission, x = ~Avg.SAT, y = ~Admission.Rate,
-            text = ~paste("School: ", Institution.Name,'\nYear:', Year, '\nCity:', City, '\nState:', State.Postcode),
-            color = ~Avg.SAT, size = ~Avg.SAT
-            )
+  # This is for school filter plot Panel
+  school_filtered <- reactive({
+    if(input$state_admission_plot == '') {
+      all_data_needed <- admission %>%
+        filter(Year >= input$year_admission_plot[[1]], Year <= input$year_admission_plot[[2]]) %>%
+        filter(Avg.SAT >= input$SAT_admission_plot[[1]], Avg.SAT <= input$SAT_admission_plot[[2]]) %>%
+        filter(Admission.Rate >= input$admission_rate_admission_plot[[1]], Admission.Rate <= input$admission_rate_admission_plot[[2]])
+      return(all_data_needed)
+    } else {
+      all_data_needed <- admission %>%
+        filter(Year >= input$year_admission_plot[[1]], Year <= input$year_admission_plot[[2]]) %>%
+        filter(Avg.SAT >= input$SAT_admission_plot[[1]], Avg.SAT <= input$SAT_admission_plot[[2]]) %>%
+        filter(State.Postcode == state.abb[match(input$state_admission_plot,state.name)]) %>%
+        filter(Admission.Rate >= input$admission_rate_admission_plot[[1]], Admission.Rate <= input$admission_rate_admission_plot[[2]]) 
+      return(all_data_needed)
+    }
   })
   
+  output$school_filter <- renderPlotly({
+    plot_ly(school_filtered(), x = ~Avg.SAT, y = ~Admission.Rate,
+            text = ~paste("School: ", Institution.Name,'\nYear:', Year, '\nCity:', City, '\nState:', State.Postcode),
+            color = ~Avg.SAT, size = ~Avg.SAT
+    )
+  })
   
   #---------------------------------------------------------------------------------
   # This is for the cost page
@@ -209,7 +225,32 @@ server <- function(input, output) {
    return(cost_page_tution_select)
  })
    
-  
+  output$tuiton_salary <- renderPlotly({
+    for (i in 1:nrow(cost_page_tution)) {
+      # International student or Private Schools
+      if (input$state_for_cost == '' | cost_page_tution$school_type[i] == "private") {
+        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State_Tuition[i]
+      } 
+      # US citizen
+      else {
+        if(cost_page_tution$school_type[i] == "public" & 
+           cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State_Tuition[i]
+        }
+        else
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State_Tuition[i]
+        }
+      }
+    }
+    cost_page_tution_select <- cost_page_tution %>%
+      filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
+    plot_ly(cost_page_tution_select, x = ~your_tuition, y = ~Avg.Faculty.Salary,
+            text = ~paste("School: ", Institution.Name,'\nyour_tuition:', your_tuition, '\nCity:', City, '\nState:', State),
+            color = ~your_tuition, size = ~Avg.Faculty.Salary
+    )
+  })
   
  
   
@@ -274,89 +315,72 @@ server <- function(input, output) {
   })
   
   #-----------------------------------------------------------------------------------
-  # Diversity data
-  output$state_output <- renderUI({
-    citywise <- unique(filter(diversity_data,
-                               state == input$state_diver)$City)
-     citywise <- citywise[order(citywise)]
-    selectInput('city', label = "City Option (Select or Type)",
-                choices =  citywise,
-                multiple = F, selected = F)
-  })
-  
-  filtered_city <- reactive({
-    diversity_table <- diversity_data %>%
-      select(Institution.Name, City, state, Year, total_men, total_women) %>%
-      filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
-      filter(state == input$state_diver) %>%
-      filter(City == input$city)
-    return(diversity_table)
-  })
-  
+  # Diversity Data
   filtered_state <- reactive({
-    state_table <- diversity_data %>%
-      select(Institution.Name, City, state, Year, 
-             `Percent.1st-generation`, total_men, total_women) %>%
-      filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
+    diversity_data %>%
+      select(Institution.Name, City, state, Year, total_men, total_women) %>%
+      filter(Year == input$year_diver) %>%
       filter(state == input$state_diver)
-    return(state_table)
   })
   
   output$diversity_ui <- renderUI({
-    if(input$state_diver  == '' & input$city == ''){
-      return(h4(strong("Please choose a State first.")))
-    } else if(input$state_diver != '' & input$city == '') {
-      plotlyOutput("diversity_state_plot")
-    } else if(input$state_diver != '' & input$city != '') {
-      plotlyOutput("diversity_city_plot")
-    } else {
-      return(h4(strong("Selection conflict: You can only use one selection method.")))
-    }
+    plotlyOutput("diversity_state_plot")
   })
   
   output$diversity_state_plot <- renderPlotly({
-    plot5 <- ggplot(data = filtered_state(), mapping = aes(x = Institution.Name, y = total_men)) +
-      geom_point(aes()) +
-      labs(
-        title = "School vs. Percent Men Enrolled",
-        x = "School",
-        y = "Enrolled Men") +
-      theme(axis.text.x = element_text(angle = 90,
-                                       vjust = 0.5,
-                                       hjust = 1),
-            plot.title = element_text(color = "red"),
-            axis.title.x = element_text(color = "dark green"),
-            axis.title.y = element_text(color = "dark green"))
-    plot5 <- ggplotly(plot5)
-  })
-  
-  output$diversity_city_plot <- renderPlotly({
-    plot6 <- ggplot(data = filtered_city(), mapping = aes(x = Institution.Name, y = total_men)) +
-      geom_point(aes()) +
-      geom_line(aes()) +
-      labs(
-        title = "Admission Rate vs. Year",
-        x = "Year",
-        y = "Admission Rate") +
-      theme(axis.text.x = element_text(angle = 90,
-                                       vjust = 0.5,
-                                       hjust = 1),
-            plot.title = element_text(color = "red"),
-            axis.title.x = element_text(color = "dark green"),
-            axis.title.y = element_text(color = "dark green"))
-    plot6 <- ggplotly(plot6)
+    plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
+      add_trace(y = ~total_women, name = 'Total Women') %>%
+      layout(yaxis = list(title = 'Count'), barmode = 'group')
+    # ggplot(data = filtered_state(), mapping = aes(x = Year, y = total_men), color = Institution.Name) +
+    #   geom_point(aes()) +
+    #   labs(
+    #     title = "School vs. Percent Men Enrolled",
+    #     x = "School",
+    #     y = "Enrolled Men") +
+    #   theme(axis.text.x = element_text(angle = 90,
+    #                                    vjust = 0.5,
+    #                                    hjust = 1),
+    #         plot.title = element_text(color = "red"),
+    #         axis.title.x = element_text(color = "dark green"),
+    #         axis.title.y = element_text(color = "dark green"))
   })
   
   output$diversity_table <- renderDataTable({
-    if(input$state_diver == '' & input$city == '') {
+    if(input$state_diver == '') {
       table_output <- diversity_data %>%
-        filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
+        filter(Year == input$year_diver) %>%
         select(Year, Institution.Name, state, City, total_men, total_women)
       table_output
-    } else if(input$state_diver != '' & input$city == '') {
+    } else if(input$state_diver != '') {
       filtered_state()
-    } else {
-      filtered_city()
+    }
+  })
+  
+  # First Generation Data
+  filtered_state_gen <- reactive({
+    diversity_data %>%
+      select(Institution.Name, City, state, Year, total_first_gen) %>%
+      filter(Year == input$year_diver) %>%
+      filter(state == input$state_diver)
+  })
+  
+  output$generation_ui <- renderUI({
+    plotlyOutput("first_gen_plot")
+  })
+  
+  output$first_gen_plot <- renderPlotly({
+    plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~total_first_gen, type = 'bar', name = 'Total Men')%>% 
+      layout(yaxis = list(title = 'Count'))
+  })
+  
+  output$first_table <- renderDataTable({
+    if(input$state_diver == '') {
+      table_output <- diversity_data %>%
+        filter(Year == input$year_diver) %>%
+        select(Year, Institution.Name, state, City, total_first_gen)
+      table_output
+    } else if(input$state_diver != '') {
+      filtered_state_gen()
     }
   })
 }

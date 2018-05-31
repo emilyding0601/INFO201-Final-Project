@@ -52,8 +52,8 @@ summary_adm <- admission %>% select("Admission.Rate", "Admission.Rate.For.All") 
 #----------------------------------------------------
 # This is for the Cost page
 cost_page <- df_2006_2015 %>% select(1, (4:6), (12:16))
-cost_page_tution <- cost_page %>% filter(Year == "2015") %>% select(2:6)
-colnames(cost_page_tution) <- c("Institution.Name", "City", "State", "In_State_Tuition", "Out_State_Tuition")
+cost_page_tution <- cost_page %>% filter(Year == "2015") %>% select((2:6), 9)
+colnames(cost_page_tution) <- c("Institution.Name", "City", "State", "In_State_Tuition", "Out_State_Tuition", "Avg.Faculty.Salary")
 cost_page_tution$In_State_Tuition <- as.numeric(as.character(cost_page_tution$In_State_Tuition))
 cost_page_tution$Out_State_Tuition <- as.numeric(as.character(cost_page_tution$Out_State_Tuition))
 
@@ -133,6 +133,7 @@ diversity_data <- df_2006_2015 %>%
          `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>% 
   mutate(state = state.name[match(State.Postcode, state.abb)],
          total_men = Enrollment * Total.Enrolled.Men,
-         total_women = Enrollment * Total.Enrolled.Women) %>% 
-  select(-State.Postcode, -Total.Enrolled.Men, -Total.Enrolled.Women)
+         total_women = Enrollment * Total.Enrolled.Women,
+         total_first_gen = Enrollment * `Percent.1st-generation`) %>% 
+  select(-State.Postcode, -`Percent.1st-generation`, -Total.Enrolled.Men, -Total.Enrolled.Women)
 

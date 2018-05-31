@@ -34,15 +34,24 @@ ui <- fluidPage(
       )
     ),
     #-------------------------------------------------------------------------
+    # This is School Filter Page
     tabPanel(
-      "Admission Plot",
+      "School Filter",
       sidebarLayout(
         sidebarPanel(
-        p(strong("This is an", strong(code("overview")), "plot of different colleges with recent admission information.")),
-        helpText("Please be patient for the graph to load.")
+          p(strong("You can use this page to", strong(code("filter")), "schools that may suit you!")),
+          sliderInput("year_admission_plot", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+          sliderInput("admission_rate_admission_plot", "Admission Rate", 0, 1, value = c(0, 1), sep = ""),
+          sliderInput("SAT_admission_plot", "Average SAT Score", 400, 1600, value = c(400, 1600), step = 50, sep = ""),
+          selectInput('state_admission_plot', label = "School's State (Select or Type)",
+                      choices =  c("", state.name),
+                      multiple = F, selected = F)
         ),
         mainPanel(
-          plotlyOutput("admission_plot_page")
+          p(strong("This is an", strong(code("overview")), "plot of different colleges with recent admission information.")),
+          helpText("Please be patient for the graph to load."),
+          plotlyOutput("school_filter"),
+          p("After finding suitable schools, you can see the details of that school in the", strong(code("School Search")), "page.")
         )
       )
     ),
@@ -84,26 +93,21 @@ ui <- fluidPage(
         )
       ),
 
-        #-------------------------------------------------------------------------
         mainPanel(
           tabsetPanel(
-            #-------------------------------------------------------------------------
             tabPanel(
               "Admission Rate",
               dataTableOutput("admission_table")
             ),
-            #-------------------------------------------------------------------------
             tabPanel(
               "Admission Rate Plot",
               uiOutput("admission_rate_ui"),
               em(tags$p("Not all schools have 2006-2015 admission rate data available."))
             ),
-            #-------------------------------------------------------------------------
             tabPanel(
               "SAT Table",
               dataTableOutput("SAT_table")
             ),
-            #-------------------------------------------------------------------------
             tabPanel(
               "SAT Score Plot",
               uiOutput("SAT_ui"),
@@ -133,7 +137,7 @@ ui <- fluidPage(
           br(),
           helpText("Choose a ", strong("tuition"), " range"),
 
-          sliderInput("tuition_slider", "Tuition ($)", 0, 70000, value = c(0, 70000), 
+          sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
                       step = 500, pre = "$", sep = ""),
           #helpText("Choose a ", strong("school type")),
           #checkboxGroupInput("school_type", "School Type:", c("private", "public"), selected = c("private", "public")),
@@ -146,8 +150,8 @@ ui <- fluidPage(
               dataTableOutput("filter_cost_table")
             ),
             tabPanel(
-              "Tuition Plot",
-              plotOutput("expenditurevsfaculty") 
+              "Tuition vs Faculty Salary",
+              plotlyOutput("tuiton_salary") 
             )
           )
         )
@@ -163,29 +167,37 @@ ui <- fluidPage(
         sidebarPanel(
           p(strong("See the percet of gender distribution.")),
           p("Select Year Range"),
-          sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+          sliderInput("year_diver", "Year", 2006, 2015, value = 2015, sep = ""),
           br(),
           p("Select State and/or College"),
-          helpText("There are ", strong("two"), "selection method, you can only use one at a time."),
+          helpText("You can", strong(code("select or type")), "a state."),
           
-          helpText("1) You can", strong(code("select or type")), "a state first and then",
-                   strong(code("select or type")), "a college in that state."),
           selectInput('state_diver', label = "State Option (Select or Type)",
                       choices =  c(diversity_data$state),
-                      multiple = F, selected = F),
-          uiOutput("state_output")
+                      multiple = F, selected = F)
         ), 
+        # wellPanel(
+        #   h4(strong("Summary")),
+        #   helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
+        #            The graph and table show the number of each gender from each each school. After observing the data,
+        #            it is shown  that the difference between two genders and the amount of each gender have only slight
+        #            changes. In the graph and table of first generation, we can see the amount of people who are first
+        #            generation in each year and each school. These also show the changes are mild")
+        # ),
+        
         mainPanel(
           tabsetPanel(
             
             tabPanel(
-              "Percent Men/Women", 
+              "Total Men/Women", 
               uiOutput("diversity_ui"),
               dataTableOutput("diversity_table")
             ),
             
             tabPanel(
-              "1st Generation", dataTableOutput("first")
+              "1st Generation", 
+              uiOutput("generation_ui"),
+              dataTableOutput("first_table")
             )
           )
         )
