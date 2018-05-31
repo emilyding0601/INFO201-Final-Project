@@ -149,7 +149,7 @@ server <- function(input, output) {
   })
   
   output$SAT_plot <- renderPlotly({
-    plot3 <- ggplot(data = filtered_2(), mapping = aes(x = Year, y = Avg.SAT), color = Avg.SAT) +
+    plot3 <- ggplot(data = filtered_2(), mapping = aes(x = Year, y = Avg.SAT, color = Avg.SAT)) +
       geom_point(aes()) +
       geom_line(aes()) +
       labs(
@@ -161,7 +161,8 @@ server <- function(input, output) {
   })
 
   output$SAT_plot_2 <- renderPlotly({
-    plot4 <- ggplot(data = filtered_for_college_name_SAT(), mapping = aes(x = Year, y = Avg.SAT), color = Avg.SAT) +
+    plot4 <- ggplot(data = filtered_for_college_name_SAT(), 
+                    mapping = aes(x = Year, y = Avg.SAT, color = Avg.SAT)) +
       geom_point(aes()) +
       geom_line(aes()) +
       labs(
@@ -328,29 +329,14 @@ server <- function(input, output) {
     plotlyOutput("diversity_men_plot")
   })
   
-  output$diversity_women <- renderUI({
-    plotlyOutput("diversity_women_plot")
-  })
-  
   output$diversity_men_plot <- renderPlotly({
-    # plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
-    #   add_trace(y = ~total_women, name = 'Total Women') %>%
-    #   layout(yaxis = list(title = 'Count'), barmode = 'group')
-    
-    plot_ly(filtered_state(), x = ~Year, y = ~Total.Men, color = ~Institution.Name,
-            text = ~paste("School: ", Institution.Name,'\nYear:', Year,
-                          '\nCity:', City, '\nState:', State, '\nGender: Men'))
-  })
-  
-  output$diversity_women_plot <- renderPlotly({
-    # plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
-    #   add_trace(y = ~total_women, name = 'Total Women') %>%
-    #   layout(yaxis = list(title = 'Count'), barmode = 'group')
-    
-    plot_ly(filtered_state(), x = ~Year, y = ~Total.Women, color = ~Institution.Name,
-            text = ~paste("School: ", Institution.Name,'\nYear:', Year,
-                          '\nCity:', City, '\nState:', State, '\nGender: Women')) %>%
-      layout(yaxis = list(title = 'Count'), barmode = 'group')
+    plot_ly(filtered_state(), x = ~Institution.Name, y = ~Total.Men, 
+            type = 'bar', mode = 'markers', name = 'Total Men',
+            text = ~paste('Year: ', input$year_diver[[1]], "to", input$year_diver[[2]])) %>%
+      add_trace(y = ~Total.Women, name = 'Total Women') %>%
+      layout(title = "Total Men and Total Women vs. Schools",
+             yaxis = list(title = 'Total Men Cout'), barmode = 'group',
+             xaxis = list(title = ''))
   })
   
   output$diversity_table <- renderDataTable({
@@ -377,11 +363,13 @@ server <- function(input, output) {
   })
   
   output$first_gen_plot <- renderPlotly({
-    # plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~Total.First.Gen, type = 'bar', name = 'Total First Gen.') %>% 
-    #   layout(yaxis = list(title = 'Count'))
     plot_ly(filtered_state_gen(), x = ~Year, y = ~Total.First.Gen, color = ~Institution.Name,
             text = ~paste("School: ", Institution.Name,'\nYear:', Year,
-                          '\nCity:', City, '\nState:', State))
+                          '\nCity:', City, '\nState:', State)) %>%
+      layout(yaxis = list(title = 'Total First Generation Count'), 
+             title = "Total First Generation in Colleges each Year", 
+             barmode = 'group')
+
   })
   
   output$first_table <- renderDataTable({

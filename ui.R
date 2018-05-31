@@ -45,12 +45,23 @@ ui <- fluidPage(
           sliderInput("SAT_admission_plot", "Average SAT Score", 400, 1600, value = c(400, 1600), step = 50, sep = ""),
           selectInput('state_admission_plot', label = "School's State (Select or Type)",
                       choices =  c("", state.name),
-                      multiple = F, selected = F)
+                      multiple = F, selected = F),
+          br(),
+          hr(),
+          h5(strong("Note:")),
+          helpText("Here's an entire data visualization to show how the SAT score status and 
+                   admission rate in each school. You can select the ", strong("Year, Admission Rate and
+                   SAT score "), "to find your school. And the click ", strong(code("School Search")),
+                   " to find your school.")
+          
         ),
         mainPanel(
           p(strong("This is an", strong(code("overview")), "plot of different colleges with recent admission information.")),
           helpText("Please be patient for the graph to load."),
           plotlyOutput("school_filter"),
+          br(),
+          hr(),
+          br(),
           p("After finding suitable schools, you can see the details of that school in the", strong(code("School Search")), "page.")
         )
       )
@@ -81,13 +92,12 @@ ui <- fluidPage(
            uiOutput("college_names_2")
         ), 
         wellPanel(
-          h4(strong("Summary:")),
+          h5(strong("Summary:")),
           br(),
           helpText("After observing recent years admission rate and admitted students average SAT score of multiple colleges.
             We noticed that most of the schools, especially schools with academic prestige, have an downward trend
             of admission rate and an upward trend of admitted students average SAT score. That is, most colleges
             are harder and harder to get into."),
-          br(),
           helpText("We also noticed that despite the trends, the admission rate and average SAT score fluctuate within
             a certain range, about ten percent for the admission rate and fifty points for the SAT score.")
         )
@@ -145,12 +155,13 @@ ui <- fluidPage(
         ),
         
         wellPanel(
-          h4(strong("Summary:")),
+          h5(strong("Summary:")),
           br(),
-          p("After observing recent years tuitions and average salary of fautly of multiple colleges,", 
-           code("need to add the summary")),
-          br(),
-          p(code("need to add the summary"))
+          helpText("There are ", strong(nrow(cost_page_tution)), " schools from 2006 to 2015. 
+            The highest tuition is ", strong(max_cost$Institution.Name), "with $", strong(max_cost$In.State),
+            " tuition per year. And the faculty salary is $", strong(max_cost$Avg.Faculty.Salary), "."),
+          helpText("The highes faculty salary is $", strong(max_salary$Avg.Faculty.Salary), "in",
+            strong(max_salary$Institution.Name), ".")
           )
       ),
         mainPanel(
@@ -175,39 +186,45 @@ ui <- fluidPage(
       "Diversity",
       fluidRow(
         column(4,
-          wellPanel(
-          p(strong("See the percet of gender distribution.")),
-          p("Select Year Range"),
-          sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
-          br(),
-          p("Select State and/or College"),
-          helpText("You can", strong(code("select or type")), "a state."),
-          
-          selectInput('state_diver', label = "State Option (Select or Type)",
-                      choices =  c(diversity_data$State),
-                      multiple = F, selected = F)
-        ), 
-        wellPanel(
-          h4(strong("Summary")),
-          helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
-                   The graph and table show the number of each gender from each each school. After observing the data,
-                   it is shown  that the difference between two genders and the amount of each gender have only slight
-                   changes. In the graph and table of first generation, we can see the amount of people who are first
-                   generation in each year and each school. These also show the changes are mild")
-        )
-      ),
+               wellPanel(
+                 p(strong("See the percet of gender distribution.")),
+                 p("Select Year Range"),
+                 sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+                 br(),
+                 p("Select State"),
+                 
+                 selectInput('state_diver', label = "State Option",
+                             choices =  c(diversity_data$State),
+                             multiple = F, selected = F)
+               ), 
+               wellPanel(
+                 h4(strong("Summary")),
+                 helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
+                          The graph and table show the number of each gender from each each school. After observing the data,
+                          it is shown  that the difference between two genders and the amount of each gender have only slight
+                          changes. In the graph and table of first generation, we can see the amount of people who are first
+                          generation in each year and each school. These also show the changes are mild")
+                 )
+                 ),
         mainPanel(
           tabsetPanel(
             
             tabPanel(
               "Total Men/Women", 
+              br(),
+              br(),
+              
               uiOutput("diversity_men"),
-              uiOutput("diversity_women"),
+              br(),
+              hr(),
+              
               dataTableOutput("diversity_table")
             ),
             
             tabPanel(
               "1st Generation", 
+              br(),
+              br(),
               uiOutput("generation_ui"),
               dataTableOutput("first_table")
             )
@@ -215,6 +232,7 @@ ui <- fluidPage(
         )
       )
     ),
+    
     
 
 

@@ -65,6 +65,9 @@ for (i in 1:nrow(cost_page_tution)) {
   }
 }
 
+max_cost <- cost_page_tution %>% arrange(-In.State) %>% head(1)
+max_salary <- cost_page_tution %>% arrange(-Avg.Faculty.Salary) %>% head(1)
+
 #----------------------------------------------------
 # average age by year in each state
 avg_age_year <- df_2006_2015 %>% group_by(Year, State.Postcode) %>% 
@@ -136,4 +139,3 @@ diversity_data <- df_2006_2015 %>%
          Total.Women = round(Enrollment * Total.Enrolled.Women, 0),
          Total.First.Gen = round(Enrollment * `Percent.1st-generation`, 0)) %>% 
   select(-State.Postcode, -`Percent.1st-generation`, -Total.Enrolled.Men, -Total.Enrolled.Women)
-
