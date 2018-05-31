@@ -202,56 +202,55 @@ server <- function(input, output) {
   #---------------------------------------------------------------------------------
   # This is for the cost page
 
- output$filter_cost_table <- renderDataTable({
+  output$filter_cost_table <- renderDataTable({
     for (i in 1:nrow(cost_page_tution)) {
       # International student or Private Schools
-      if (input$state_for_cost == '' | cost_page_tution$Type[i] == "Private") {
-        cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
+      if (input$state_for_cost == "" | cost_page_tution$school_type[i] == "private") {
+        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
       } 
       # US citizen
       else {
-        if(cost_page_tution$Type[i] == "Public" & 
+        if(cost_page_tution$school_type[i] == "public" & 
            cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
         {
-          cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
+          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
         }
         else
         {
-          cost_page_tution$Tuition[i] <- cost_page_tution$In.State[i]
-        }
-      }
-    }
-   cost_page_tution_select <- cost_page_tution %>%
-     filter(State == state.abb[match(input$state_for_cost,state.name)]) %>%
-     filter(Tuition > input$tuition_slider[[1]], Tuition < input$tuition_slider[[2]]) 
-   return(cost_page_tution_select)
- })
-
-  output$tuiton_salary <- renderPlotly({
-    for (i in 1:nrow(cost_page_tution)) {
-      # International student or Private Schools
-      if (input$state_for_cost == '' | cost_page_tution$Type[i] == "Private") {
-        cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
-      } 
-      # US citizen
-      else {
-        if(cost_page_tution$Type[i] == "Public" & 
-           cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
-        {
-          cost_page_tution$Tuition[i] <- cost_page_tution$Out.State[i]
-        }
-        else
-        {
-          cost_page_tution$Tuition[i] <- cost_page_tution$In.State[i]
+          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State[i]
         }
       }
     }
     cost_page_tution_select <- cost_page_tution %>%
-      filter(Tuition > input$tuition_slider[[1]], Tuition < input$tuition_slider[[2]])
-    plot_ly(cost_page_tution_select, x = ~Tuition, y = ~Avg.Faculty.Salary,
-            text = ~paste("School: ", Institution.Name,'\nTuition:', Tuition, '\nCity:', City, '\nState:', State),
-            color = ~Tuition, size = ~Avg.Faculty.Salary
-    ) %>% layout(title = "Total Tuition vs. Faculty Salary")
+      filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
+    return(cost_page_tution_select)
+  })
+
+  output$tuiton_salary <- renderPlotly({
+    for (i in 1:nrow(cost_page_tution)) {
+      # International student or Private Schools
+      if (input$state_for_cost == '' | cost_page_tution$school_type[i] == "private") {
+        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
+      } 
+      # US citizen
+      else {
+        if(cost_page_tution$school_type[i] == "public" & 
+           cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State[i]
+        }
+        else
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State[i]
+        }
+      }
+    }
+    cost_page_tution_select <- cost_page_tution %>%
+      filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
+    plot_ly(cost_page_tution_select, x = ~your_tuition, y = ~Avg.Faculty.Salary,
+            text = ~paste("School: ", Institution.Name,'\nyour_tuition:', your_tuition, '\nCity:', City, '\nState:', State),
+            color = ~your_tuition, size = ~Avg.Faculty.Salary
+    )
   })
   
  

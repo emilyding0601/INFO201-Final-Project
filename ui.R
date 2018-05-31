@@ -137,20 +137,19 @@ ui <- fluidPage(
       fluidRow(
         column(4,
           wellPanel(
-          h5(strong("Note")),
-          helpText("Enter your", strong("state residence"), "."),
-          helpText("If you", strong("don't belong to any state,"), 
-                   "(such as International Students), leave it", strong("blank")),
-          
-          selectInput('state_for_cost', label = "Your state residence (Select or Type)", 
-                      choices =  c("Alabama", state.name),
-                      multiple = F, selected = F),
-          br(),
-          helpText("Choose a ", strong("tuition"), " range"),
-
-          sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
-                      step = 500, pre = "$", sep = ""),
-          
+            h5(strong("Note")),
+            helpText("Enter your", strong("state residence"), "."),
+            helpText("If you", strong("don't belong to any state,"), 
+                     "(such as International Students), leave it", strong("blank")),
+            
+            selectInput('state_for_cost', label = "Your state residence (Select or Type)", 
+                        choices =  c("", state.name), 
+                        multiple = F, selected = F),
+            br(),
+            helpText("Choose a ", strong("tuition"), " range"),
+            
+            sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
+                        step = 500, pre = "$", sep = ""),
           br()
         ),
         
@@ -158,7 +157,7 @@ ui <- fluidPage(
           h5(strong("Summary:")),
           br(),
           helpText("There are ", strong(nrow(cost_page_tution)), " schools from 2006 to 2015. 
-            The highest tuition is ", strong(max_cost$Institution.Name), "with $", strong(max_cost$In.State),
+            The highest tuition is ", strong(max_cost$Institution.Name), "with $", strong(max_cost$In_State),
             " tuition per year. And the faculty salary is $", strong(max_cost$Avg.Faculty.Salary), "."),
           helpText("The highes faculty salary is $", strong(max_salary$Avg.Faculty.Salary), "in",
             strong(max_salary$Institution.Name), ".")
