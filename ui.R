@@ -93,26 +93,21 @@ ui <- fluidPage(
         )
       ),
 
-        #-------------------------------------------------------------------------
         mainPanel(
           tabsetPanel(
-            #-------------------------------------------------------------------------
             tabPanel(
               "Admission Rate",
               dataTableOutput("admission_table")
             ),
-            #-------------------------------------------------------------------------
             tabPanel(
               "Admission Rate Plot",
               uiOutput("admission_rate_ui"),
               em(tags$p("Not all schools have 2006-2015 admission rate data available."))
             ),
-            #-------------------------------------------------------------------------
             tabPanel(
               "SAT Table",
               dataTableOutput("SAT_table")
             ),
-            #-------------------------------------------------------------------------
             tabPanel(
               "SAT Score Plot",
               uiOutput("SAT_ui"),
@@ -142,7 +137,7 @@ ui <- fluidPage(
           br(),
           helpText("Choose a ", strong("tuition"), " range"),
 
-          sliderInput("tuition_slider", "Tuition ($)", 0, 70000, value = c(0, 70000), 
+          sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
                       step = 500, pre = "$", sep = ""),
           #helpText("Choose a ", strong("school type")),
           #checkboxGroupInput("school_type", "School Type:", c("private", "public"), selected = c("private", "public")),
@@ -155,8 +150,8 @@ ui <- fluidPage(
               dataTableOutput("filter_cost_table")
             ),
             tabPanel(
-              "Tuition Plot",
-              plotOutput("expenditurevsfaculty") 
+              "Tuition vs Faculty Salary",
+              plotlyOutput("tuiton_salary") 
             )
           )
         )

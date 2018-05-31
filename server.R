@@ -225,7 +225,32 @@ server <- function(input, output) {
    return(cost_page_tution_select)
  })
    
-  
+  output$tuiton_salary <- renderPlotly({
+    for (i in 1:nrow(cost_page_tution)) {
+      # International student or Private Schools
+      if (input$state_for_cost == '' | cost_page_tution$school_type[i] == "private") {
+        cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State_Tuition[i]
+      } 
+      # US citizen
+      else {
+        if(cost_page_tution$school_type[i] == "public" & 
+           cost_page_tution$State[i] != state.abb[match(input$state_for_cost,state.name)]) 
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$Out_State_Tuition[i]
+        }
+        else
+        {
+          cost_page_tution$your_tuition[i] <- cost_page_tution$In_State_Tuition[i]
+        }
+      }
+    }
+    cost_page_tution_select <- cost_page_tution %>%
+      filter(your_tuition > input$tuition_slider[[1]], your_tuition < input$tuition_slider[[2]])
+    plot_ly(cost_page_tution_select, x = ~your_tuition, y = ~Avg.Faculty.Salary,
+            text = ~paste("School: ", Institution.Name,'\nyour_tuition:', your_tuition, '\nCity:', City, '\nState:', State),
+            color = ~your_tuition, size = ~Avg.Faculty.Salary
+    )
+  })
   
  
   
