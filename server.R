@@ -272,8 +272,9 @@ server <- function(input, output) {
     
     leafletProxy('map') %>% clearMarkers() %>% 
       setView(lng = filtered_state$Long[1], lat = filtered_state$Lat[1], zoom = 7) %>% 
-      addMarkers(lng = filtered_state$Long,
+      addCircleMarkers(lng = filtered_state$Long,
                  lat = filtered_state$Lat,
+                 fillOpacity = .7, color = "#3182bd", radius = 7, stroke = TRUE,
                  label = text,
                  labelOptions = labelOptions(style = list("font-weight" = "normal",
                                                           padding = "5px 10px"), 
@@ -287,8 +288,9 @@ server <- function(input, output) {
     leaflet() %>% 
       addTiles() %>% 
       setView(lng = -122.3321, lat = 47.6062, zoom = 7) %>% 
-      addMarkers(lng = df_2015$Long,
+      addCircleMarkers(lng = df_2015$Long,
                  lat = df_2015$Lat,
+                 fillOpacity = .7, color = "#3182bd", radius = 7, stroke = TRUE,
                  label = text,
                  labelOptions = labelOptions(style = list("font-weight" = "normal",
                                                           padding = "5px 10px"), 
