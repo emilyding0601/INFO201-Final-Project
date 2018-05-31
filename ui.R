@@ -149,8 +149,7 @@ ui <- fluidPage(
             helpText("Choose a ", strong("tuition"), " range"),
             
             sliderInput("tuition_slider", "Tuition ($)", 0, 55500, value = c(0, 55500), 
-                        step = 500, pre = "$", sep = ""),
-          br()
+                        step = 500, pre = "$", sep = "")
         ),
         
         wellPanel(
