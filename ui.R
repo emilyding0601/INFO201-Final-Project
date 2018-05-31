@@ -184,7 +184,7 @@ ui <- fluidPage(
           helpText("You can", strong(code("select or type")), "a state."),
           
           selectInput('state_diver', label = "State Option (Select or Type)",
-                      choices =  c(diversity_data$state),
+                      choices =  c(diversity_data$State),
                       multiple = F, selected = F)
         ), 
         wellPanel(
