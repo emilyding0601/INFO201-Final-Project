@@ -356,7 +356,7 @@ server <- function(input, output) {
   filtered_state_gen <- reactive({
     diversity_data %>%
       select(Institution.Name, City, State, Year, Total.First.Gen) %>%
-      filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
+      filter(Year >= input$year_gen[[1]], Year <= input$year_gen[[2]]) %>%
       filter(State == input$state_diver)
   })
   
@@ -377,7 +377,7 @@ server <- function(input, output) {
   output$first_table <- renderDataTable({
     if(input$state_diver == '') {
       table_output <- diversity_data %>%
-        filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
+        filter(Year >= input$year_gen[[1]], Year <= input$year_gen[[2]]) %>%
         select(Year, Institution.Name, State, City, Total.First.Gen)
       table_output
     } else if(input$state_diver != '') {
