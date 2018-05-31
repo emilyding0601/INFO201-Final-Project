@@ -133,6 +133,7 @@ diversity_data <- df_2006_2015 %>%
          `Percent.1st-generation`, Total.Enrolled.Men, Total.Enrolled.Women) %>% 
   mutate(state = state.name[match(State.Postcode, state.abb)],
          total_men = Enrollment * Total.Enrolled.Men,
-         total_women = Enrollment * Total.Enrolled.Women) %>% 
-  select(-State.Postcode, -Total.Enrolled.Men, -Total.Enrolled.Women)
+         total_women = Enrollment * Total.Enrolled.Women,
+         total_first_gen = Enrollment * `Percent.1st-generation`) %>% 
+  select(-State.Postcode, -`Percent.1st-generation`, -Total.Enrolled.Men, -Total.Enrolled.Women)
 
