@@ -323,7 +323,7 @@ server <- function(input, output) {
   filtered_state <- reactive({
     diversity_data %>%
       select(Institution.Name, City, State, Year, Total.Men, Total.Women) %>%
-      filter(Year >= input$year_diver[[1]], Year <= input$year_diver[[2]]) %>%
+      filter(Year == input$year_diver) %>%
       filter(State == input$state_diver)
   })
   
@@ -334,7 +334,7 @@ server <- function(input, output) {
   output$diversity_men_plot <- renderPlotly({
     plot_ly(filtered_state(), x = ~Institution.Name, y = ~Total.Men, 
             type = 'bar', mode = 'markers', name = 'Total Men',
-            text = ~paste('Year: ', input$year_diver[[1]], "to", input$year_diver[[2]])) %>%
+            text = ~paste('Year: ', input$year_diver)) %>%
       add_trace(y = ~Total.Women, name = 'Total Women') %>%
       layout(title = "Total Men and Total Women vs. Schools",
              yaxis = list(title = 'Total Men Cout'), barmode = 'group',

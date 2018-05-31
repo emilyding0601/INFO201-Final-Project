@@ -190,7 +190,7 @@ ui <- fluidPage(
                wellPanel(
                  p(strong("See the percet of gender distribution.")),
                  p("Select Year Range"),
-                 sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+                 sliderInput("year_diver", "Year", 2006, 2015, value =2015, sep = ""),
                  br(),
                  p("Select State"),
                  
