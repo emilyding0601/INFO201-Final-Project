@@ -178,7 +178,7 @@ ui <- fluidPage(
           wellPanel(
           p(strong("See the percet of gender distribution.")),
           p("Select Year Range"),
-          sliderInput("year_diver", "Year", 2006, 2015, value = 2015, sep = ""),
+          sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
           br(),
           p("Select State and/or College"),
           helpText("You can", strong(code("select or type")), "a state."),
@@ -201,7 +201,8 @@ ui <- fluidPage(
             
             tabPanel(
               "Total Men/Women", 
-              uiOutput("diversity_ui"),
+              uiOutput("diversity_men"),
+              uiOutput("diversity_women"),
               dataTableOutput("diversity_table")
             ),
             
