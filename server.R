@@ -331,18 +331,6 @@ server <- function(input, output) {
     plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
       add_trace(y = ~total_women, name = 'Total Women') %>%
       layout(yaxis = list(title = 'Count'), barmode = 'group')
-    # ggplot(data = filtered_state(), mapping = aes(x = Year, y = total_men), color = Institution.Name) +
-    #   geom_point(aes()) +
-    #   labs(
-    #     title = "School vs. Percent Men Enrolled",
-    #     x = "School",
-    #     y = "Enrolled Men") +
-    #   theme(axis.text.x = element_text(angle = 90,
-    #                                    vjust = 0.5,
-    #                                    hjust = 1),
-    #         plot.title = element_text(color = "red"),
-    #         axis.title.x = element_text(color = "dark green"),
-    #         axis.title.y = element_text(color = "dark green"))
   })
   
   output$diversity_table <- renderDataTable({
@@ -369,7 +357,7 @@ server <- function(input, output) {
   })
   
   output$first_gen_plot <- renderPlotly({
-    plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~total_first_gen, type = 'bar', name = 'Total Men')%>% 
+    plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~total_first_gen, type = 'bar', name = 'Total Men') %>% 
       layout(yaxis = list(title = 'Count'))
   })
   
