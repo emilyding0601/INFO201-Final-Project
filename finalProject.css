@@ -22,8 +22,8 @@ p, li {
   margin-top: 200px;
 }
 
-.html {
-  text-indent: 25px;
+.html, .answers {
+  text-indent: 40px;
   font-family: Arial;
 }
 
