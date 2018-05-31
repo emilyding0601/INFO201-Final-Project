@@ -175,39 +175,41 @@ ui <- fluidPage(
       "Diversity",
       fluidRow(
         column(4,
-          wellPanel(
-          p(strong("See the percet of gender distribution.")),
-          p("Select Year Range"),
-          sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
-          br(),
-          p("Select State and/or College"),
-          helpText("You can", strong(code("select or type")), "a state."),
-          
-          selectInput('state_diver', label = "State Option (Select or Type)",
-                      choices =  c(diversity_data$State),
-                      multiple = F, selected = F)
-        ), 
-        wellPanel(
-          h4(strong("Summary")),
-          helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
-                   The graph and table show the number of each gender from each each school. After observing the data,
-                   it is shown  that the difference between two genders and the amount of each gender have only slight
-                   changes. In the graph and table of first generation, we can see the amount of people who are first
-                   generation in each year and each school. These also show the changes are mild")
-        )
-      ),
+               wellPanel(
+                 p(strong("See the percet of gender distribution.")),
+                 p("Select Year Range"),
+                 sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+                 br(),
+                 p("Select State"),
+                 
+                 selectInput('state_diver', label = "State Option",
+                             choices =  c(diversity_data$State),
+                             multiple = F, selected = F)
+               ), 
+               wellPanel(
+                 h4(strong("Summary")),
+                 helpText("The data here shows the comparison of total men and women enrolled in a specific year and State.
+                          The graph and table show the number of each gender from each each school. After observing the data,
+                          it is shown  that the difference between two genders and the amount of each gender have only slight
+                          changes. In the graph and table of first generation, we can see the amount of people who are first
+                          generation in each year and each school. These also show the changes are mild")
+                 )
+                 ),
         mainPanel(
           tabsetPanel(
             
             tabPanel(
               "Total Men/Women", 
+              br(),
               uiOutput("diversity_men"),
+              br(),
               uiOutput("diversity_women"),
               dataTableOutput("diversity_table")
             ),
             
             tabPanel(
               "1st Generation", 
+              br(),
               uiOutput("generation_ui"),
               dataTableOutput("first_table")
             )
@@ -215,6 +217,7 @@ ui <- fluidPage(
         )
       )
     ),
+    
     
 
 

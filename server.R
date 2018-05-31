@@ -332,24 +332,21 @@ server <- function(input, output) {
   })
   
   output$diversity_men_plot <- renderPlotly({
-    # plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
-    #   add_trace(y = ~total_women, name = 'Total Women') %>%
-    #   layout(yaxis = list(title = 'Count'), barmode = 'group')
-    
     plot_ly(filtered_state(), x = ~Year, y = ~Total.Men, color = ~Institution.Name,
             text = ~paste("School: ", Institution.Name,'\nYear:', Year,
-                          '\nCity:', City, '\nState:', State, '\nGender: Men'))
+                          '\nCity:', City, '\nState:', State, '\nGender: Men'))%>%
+      layout(yaxis = list(title = 'Count'), 
+             title = "Total Men in Colleges each Year", 
+             barmode = 'group')
   })
   
   output$diversity_women_plot <- renderPlotly({
-    # plot_ly(filtered_state(), x = ~Institution.Name, y = ~total_men, type = 'bar', name = 'Total Men') %>%
-    #   add_trace(y = ~total_women, name = 'Total Women') %>%
-    #   layout(yaxis = list(title = 'Count'), barmode = 'group')
-    
     plot_ly(filtered_state(), x = ~Year, y = ~Total.Women, color = ~Institution.Name,
             text = ~paste("School: ", Institution.Name,'\nYear:', Year,
                           '\nCity:', City, '\nState:', State, '\nGender: Women')) %>%
-      layout(yaxis = list(title = 'Count'), barmode = 'group')
+      layout(yaxis = list(title = 'Count'), 
+             title = "Total Women in Colleges each Year", 
+             barmode = 'group')
   })
   
   output$diversity_table <- renderDataTable({
@@ -376,11 +373,12 @@ server <- function(input, output) {
   })
   
   output$first_gen_plot <- renderPlotly({
-    # plot_ly(filtered_state_gen(), x = ~Institution.Name, y = ~Total.First.Gen, type = 'bar', name = 'Total First Gen.') %>% 
-    #   layout(yaxis = list(title = 'Count'))
     plot_ly(filtered_state_gen(), x = ~Year, y = ~Total.First.Gen, color = ~Institution.Name,
             text = ~paste("School: ", Institution.Name,'\nYear:', Year,
-                          '\nCity:', City, '\nState:', State))
+                          '\nCity:', City, '\nState:', State))%>%
+      layout(yaxis = list(title = 'Count'), 
+             title = "Total First Generation in Colleges each Year", 
+             barmode = 'group')
   })
   
   output$first_table <- renderDataTable({
