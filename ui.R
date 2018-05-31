@@ -163,24 +163,24 @@ ui <- fluidPage(
         sidebarPanel(
           p(strong("See the percet of gender distribution.")),
           p("Select Year Range"),
-          sliderInput("year", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
+          sliderInput("year_diver", "Year", 2006, 2015, value = c(2006, 2015), sep = ""),
           br(),
           p("Select State and/or College"),
           helpText("There are ", strong("two"), "selection method, you can only use one at a time."),
           
           helpText("1) You can", strong(code("select or type")), "a state first and then",
                    strong(code("select or type")), "a college in that state."),
-          selectInput('state', label = "State Option (Select or Type)",
+          selectInput('state_diver', label = "State Option (Select or Type)",
                       choices =  c(diversity_data$state),
                       multiple = F, selected = F),
           uiOutput("state_output")
-          ), 
+        ), 
         mainPanel(
           tabsetPanel(
             tabPanel(
               "Percent Men/Women", 
               uiOutput("diversity_ui")
-              #plotOutput("menwomen") # 5th plot
+              # plotOutput("menwomen") # 5th plot
             ),
             tabPanel(
               "Diversity", dataTableOutput("diversity") # 6th plot
@@ -189,6 +189,7 @@ ui <- fluidPage(
         )
       )
     ),
+    
 
 
     #-------------------------------------------------------------------------
