@@ -10,7 +10,7 @@ nav.navbar {
   margin-bottom: 10px;
 }
 
-/* Styling for the finalProject.html file */
+/* Styling for the overview.html and conclusion.html file */
 main {
   margin: 25px;
 }
@@ -18,15 +18,23 @@ p, li {
   font-size: 12pt;
 }
 
-h1, p , li {
-/*  font-family: monospace; */
-}
-
-#top {
+#top, #analysis {
   margin-top: 200px;
 }
 
 .html {
   text-indent: 25px;
   font-family: Arial;
+}
+
+#analysis {
+  text-align: center;
+  font-size: 32pt;
+  font-weight: bold;
+}
+
+.answers {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
