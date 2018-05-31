@@ -336,7 +336,6 @@ server <- function(input, output) {
       layout(title = "Total Men and Total Women vs. Schools",
              yaxis = list(title = 'Total Men Cout'), barmode = 'group',
              xaxis = list(title = ''))
-
   })
   
   output$diversity_table <- renderDataTable({
@@ -365,8 +364,11 @@ server <- function(input, output) {
   output$first_gen_plot <- renderPlotly({
     plot_ly(filtered_state_gen(), x = ~Year, y = ~Total.First.Gen, color = ~Institution.Name,
             text = ~paste("School: ", Institution.Name,'\nYear:', Year,
-                          '\nCity:', City, '\nState:', State)) %>% 
-      layout(title = "First Generation in Hish Education vs. Year")
+                          '\nCity:', City, '\nState:', State)) %>%
+      layout(yaxis = list(title = 'Total First Generation Count'), 
+             title = "Total First Generation in Colleges each Year", 
+             barmode = 'group')
+
   })
   
   output$first_table <- renderDataTable({
