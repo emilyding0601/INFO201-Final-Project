@@ -171,11 +171,8 @@ ui <- fluidPage(
                    strong(code("select or type")), "a college in that state."),
           selectInput('state', label = "State Option (Select or Type)",
                       choices =  c(diversity_data$state),
-                      multiple = F, selected = F)
-          #uiOutput("state_output")
-          # selectInput('city', label = "City Option (Select or Type)", 
-          #             choices =  c(diversity_data$City), 
-          #             multiple = F, selected = F)
+                      multiple = F, selected = F),
+          uiOutput("state_output")
           ), 
         mainPanel(
           tabsetPanel(

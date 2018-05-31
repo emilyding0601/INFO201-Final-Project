@@ -276,12 +276,11 @@ server <- function(input, output) {
   #-----------------------------------------------------------------------------------
   # Diversity data
   output$state_output <- renderUI({
-    # citywise <- unique(filter(diversity_data, 
-    #                            State.Postcode == state.abb[match(input$state, state.name)]),
-    #                    )
+    citywise <- unique(filter(diversity_data,
+                               state == input$state)$City)
     # citywise <- citywise[order(citywise)]
     selectInput('city', label = "City Option (Select or Type)", 
-                choices =  c(diversity_data$City), 
+                choices =  citywise, 
                 multiple = F, selected = F)
   })
   
@@ -318,7 +317,7 @@ server <- function(input, output) {
   
   output$diversity_ui <- renderUI({
     if(input$state  == '' & input$city == ''){
-      return(h4(strong("Please choose a school first.")))
+      return(h4(strong("Please choose a State first.")))
     } else if(input$state != '' & input$city == '') {
       plotlyOutput("diversity_state_plot")
     } else if(input$state == '' & input$city != '') {
